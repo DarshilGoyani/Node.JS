@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus | Gallery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Reuse base styles from index.html */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #1a1a1a;
+            --accent: #ff4d94;
+            --accent-light: #ff85b3;
+            --text: #f0f0f0;
+            --text-muted: #888;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 10, 0.8);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--accent), var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            padding: 0.5rem 0;
+            transition: var(--transition);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--accent), transparent);
+            transition: width 0.6s cubic-bezier(0.65, 0, 0.35, 1);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: var(--accent-light);
+        }
+
+        /* Gallery Hero */
+        .gallery-hero {
+            min-height: 60vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 8rem 5% 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 30%, var(--accent) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, #4d79ff 0%, transparent 50%);
+            opacity: 0.1;
+            filter: blur(100px);
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { 
+                background-position: 0% 0%, 100% 100%;
+            }
+            50% { 
+                background-position: 100% 0%, 0% 100%;
+            }
+        }
+
+        .gallery-hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, var(--accent-light), #4d79ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientText 5s ease infinite;
+        }
+
+        @keyframes gradientText {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Filter Buttons */
+        .filter-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 2rem 0 3rem;
+            padding: 0 5%;
+        }
+
+        .filter-btn {
+            padding: 0.8rem 1.8rem;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            color: var(--text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .filter-btn:hover::before {
+            left: 100%;
+        }
+
+        .filter-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(45deg, var(--accent), #4d79ff);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 10px 20px rgba(255, 77, 148, 0.3);
+        }
+
+        /* Gallery Grid */
+        .gallery-grid {
+            padding: 2rem 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            aspect-ratio: 4/3;
+            transition: var(--transition);
+            animation: fadeIn 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .gallery-item:nth-child(1) { animation-delay: 0.1s; }
+        .gallery-item:nth-child(2) { animation-delay: 0.2s; }
+        .gallery-item:nth-child(3) { animation-delay: 0.3s; }
+        .gallery-item:nth-child(4) { animation-delay: 0.4s; }
+        .gallery-item:nth-child(5) { animation-delay: 0.5s; }
+        .gallery-item:nth-child(6) { animation-delay: 0.6s; }
+        .gallery-item:nth-child(7) { animation-delay: 0.7s; }
+        .gallery-item:nth-child(8) { animation-delay: 0.8s; }
+
+        .gallery-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s cubic-bezier(0.215, 0.610, 0.355, 1);
+        }
+
+        .gallery-item:hover .gallery-img {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+            padding: 2rem;
+            transform: translateY(100%);
+            transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .gallery-category {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: var(--accent);
+            color: white;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+
+        /* Image Info */
+        .image-info {
+            position: absolute;
+            top: 1.5rem;
+            left: 1.5rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.4s ease 0.1s;
+        }
+
+        .gallery-item:hover .image-info {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .image-info span {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        /* Stats */
+        .image-stats {
+            display: flex;
+            gap: 1.5rem;
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.4s ease 0.2s;
+        }
+
+        .gallery-item:hover .image-stats {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.9rem;
+        }
+
+        /* Lightbox Modal */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+            animation: zoomIn 0.3s ease;
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 10px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-close:hover {
+            background: var(--accent);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 2rem;
+        }
+
+        .lightbox-prev,
+        .lightbox-next {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .lightbox-prev:hover,
+        .lightbox-next:hover {
+            background: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .lightbox-info {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Loading Animation */
+        .gallery-loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        .gallery-loader.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-text {
+            margin-top: 2rem;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            animation: pulse 2s ease infinite;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 5%;
+            border-top: 1px solid var(--glass-border);
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .social-link:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .filter-buttons {
+                flex-wrap: wrap;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                padding: 1rem;
+            }
+            
+            .gallery-overlay {
+                padding: 1rem;
+            }
+            
+            .lightbox-nav {
+                padding: 0 1rem;
+            }
+            
+            .lightbox-prev,
+            .lightbox-next {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Floating Particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Grid Layout Variations */
+        .gallery-item.wide {
+            grid-column: span 2;
+        }
+
+        .gallery-item.tall {
+            grid-row: span 2;
+        }
+
+        /* Hover Effects */
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+            mix-blend-mode: overlay;
+        }
+
+        .gallery-item:hover::before {
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="/" class="logo">
+            <i class="fas fa-gem"></i>
+            Nexus
+        </a>
+        <ul class="nav-links">
+            <li><a href="/">Home</a></li>
+            <li><a href="/blog">Blog</a></li>
+            <li><a href="/gallary">Gallery</a></li>
+            <li><a href="/contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Gallery Hero -->
+    <section class="gallery-hero">
+        <h1>Visual Showcase</h1>
+        <p style="color: var(--text-muted); font-size: 1.2rem; max-width: 600px;">
+            A collection of our finest work, showcasing creativity, innovation, and attention to detail.
+        </p>
+    </section>
+
+    <!-- Filter Buttons -->
+    <div class="filter-buttons">
+        <button class="filter-btn active" data-filter="all">All Projects</button>
+        <button class="filter-btn" data-filter="web">Web Design</button>
+        <button class="filter-btn" data-filter="mobile">Mobile UI</button>
+        <button class="filter-btn" data-filter="branding">Branding</button>
+        <button class="filter-btn" data-filter="illustration">Illustration</button>
+        <button class="filter-btn" data-filter="3d">3D Art</button>
+    </div>
+
+    <!-- Gallery Grid -->
+    <div class="gallery-grid">
+        <!-- Item 1 -->
+        <div class="gallery-item" data-category="web">
+            <img src="https://images.unsplash.com/photo-1558655146-9f40138edfeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                 alt="Modern Dashboard" class="gallery-img">
+            <div class="image-info">
+                <span><i class="far fa-calendar"></i> Jan 15, 2024</span>
+                <span><i class="fas fa-user"></i> Alex Designer</span>
+            </div>
+            <div class="image-stats">
+                <div class="stat">
+                    <i class="far fa-heart"></i>
+                    <span>248</span>
+                </div>
+                <div class="stat">
+                    <i class="far fa-eye"></i>
+                    <span>1.2k</span>
+                </div>
+            </div>
+            <div class="gallery-overlay">
+                <span class="gallery-category">Web Design</span>
+                <h3 class="gallery-title">Modern Dashboard UI</h3>
+                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    Clean and intuitive dashboard design with real-time analytics
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div class="gallery-item" data-category="mobile">
+            <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                 alt="Mobile Banking App" class="gallery-img">
+            <div class="image-info">
+                <span><i class="far fa-calendar"></i> Jan 12, 2024</span>
+                <span><i class="fas fa-user"></i> Sam Developer</span>
+            </div>
+            <div class="image-stats">
+                <div class="stat">
+                    <i class="far fa-heart"></i>
+                    <span>189</span>
+                </div>
+                <div class="stat">
+                    <i class="far fa-eye"></i>
+                    <span>980</span>
+                </div>
+            </div>
+            <div class="gallery-overlay">
+                <span class="gallery-category">Mobile UI</span>
+                <h3 class="gallery-title">Banking App Interface</h3>
+                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    Secure and user-friendly banking application design
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 3 -->
+        <div class="gallery-item" data-category="branding">
+            <img src="https://images.unsplash.com/photo-1634942537034-2531766767d1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                 alt="Brand Identity" class="gallery-img">
+            <div class="image-info">
+                <span><i class="far fa-calendar"></i> Jan 10, 2024</span>
+                <span><i class="fas fa-user"></i> Taylor Creative</span>
+            </div>
+            <div class="image-stats">
+                <div class="stat">
+                    <i class="far fa-heart"></i>
+                    <span>312</span>
+                </div>
+                <div class="stat">
+                    <i class="far fa-eye"></i>
+                    <span>1.5k</span>
+                </div>
+            </div>
+            <div class="gallery-overlay">
+                <span class="gallery-category">Branding</span>
+                <h3 class="gallery-title">Corporate Identity</h3>
+                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    Complete brand identity package for tech startup
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 4 -->
+        <div class="gallery-item" data-category="illustration">
+            <img src="https://images.unsplash.com/photo-1579546929662-711aa81148cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                 alt="Digital Art" class="gallery-img">
+            <div class="image-info">
+                <span><i class="far fa-calendar"></i> Jan 8, 2024</span>
+                <span><i class="fas fa-user"></i> Jordan Artist</span>
+            </div>
+            <div class="image-stats">
+                <div class="stat">
+                    <i class="far fa-heart"></i>
+                    <span>427</span>
+                </div>
+                <div class="stat">
+                    <i class="far fa-eye"></i>
+                    <span>2.1k</span>
+                </div>
+            </div>
+            <div class="gallery-overlay">
+                <span class="gallery-category">Illustration</span>
+                <h3 class="gallery-title">Abstract Digital Art</h3>
+                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    Vibrant abstract illustration series for modern spaces
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 5 -->
+        <div class="gallery-item" data-category="3d">
+            <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                 alt="3D Render" class="gallery-img">
+            <div class="image-info">
+                <span><i class="far fa-calendar"></i> Jan 6, 2024</span>
+                <span><i class="fas fa-user"></i> Morgan 3D</span>
+            </div>
+            <div class="image-stats">
+                <div class="stat">
+                    <i class="far fa-heart"></i>
+                    <span>356</span>
+                </div>
+                <div class="stat">
+                    <i class="far fa-eye"></i>
+                    <span>1.8k</span>
+                </div>
+            </div>
+            <div class="gallery-overlay">
+                <span class="gallery-category">3D Art</span>
+                <h3 class="gallery-title">Futuristic Cityscape</h3>
+                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    Hyper-realistic 3D rendering of futuristic urban environment
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 6 -->
+        <div class="gallery-item" data-category="web">
+            <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                 alt="E-commerce" class="gallery-img">
+            <div class="image-info">
+                <span><i class="far fa-calendar"></i> Jan 4, 2024</span>
+                <span><i class="fas fa-user"></i> Casey Designer</span>
+            </div>
+            <div class="image-stats">
+                <div class="stat">
+                    <i class="far fa-heart"></i>
+                    <span>298</span>
+                </div>
+                <div class="stat">
+                    <i class="far fa-eye"></i>
+                    <span>1.4k</span>
+                </div>
+            </div>
+            <div class="gallery-overlay">
+                <span class="gallery-category">Web Design</span>
+                <h3 class="gallery-title">E-commerce Platform</h3>
+                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    Modern e-commerce design with seamless shopping experience
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 7 -->
+        <div class="gallery-item" data-category="mobile">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                 alt="Fitness App" class="gallery-img">
+            <div class="image-info">
+                <span><i class="far fa-calendar"></i> Jan 2, 2024</span>
+                <span><i class="fas fa-user"></i> Riley Developer</span>
+            </div>
+            <div class="image-stats">
+                <div class="stat">
+                    <i class="far fa-heart"></i>
+                    <span>231</span>
+                </div>
+                <div class="stat">
+                    <i class="far fa-eye"></i>
+                    <span>1.1k</span>
+                </div>
+            </div>
+            <div class="gallery-overlay">
+                <span class="gallery-category">Mobile UI</span>
+                <h3 class="gallery-title">Fitness Tracker App</h3>
+                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    Health and fitness tracking application with gamification
+                </p>
+            </div>
+        </div>
+
+        <!-- Item 8 -->
+        <div class="gallery-item" data-category="branding">
+            <img src="https://images.unsplash.com/photo-1634942536826-30bb2f294979?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                 alt="Product Packaging" class="gallery-img">
+            <div class="image-info">
+                <span><i class="far fa-calendar"></i> Dec 28, 2023</span>
+                <span><i class="fas fa-user"></i> Avery Creative</span>
+            </div>
+            <div class="image-stats">
+                <div class="stat">
+                    <i class="far fa-heart"></i>
+                    <span>187</span>
+                </div>
+                <div class="stat">
+                    <i class="far fa-eye"></i>
+                    <span>950</span>
+                </div>
+            </div>
+            <div class="gallery-overlay">
+                <span class="gallery-category">Branding</span>
+                <h3 class="gallery-title">Sustainable Packaging</h3>
+                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">
+                    Eco-friendly packaging design for organic product line
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <img src="" alt="" class="lightbox-img">
+            <button class="lightbox-close">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="lightbox-nav">
+                <button class="lightbox-prev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="lightbox-next">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+            <div class="lightbox-info">
+                <h3 id="lightbox-title"></h3>
+                <p id="lightbox-category"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div>
+                <a href="index.html" class="logo" style="font-size: 1.5rem;">Nexus</a>
+                <p style="margin-top: 1rem; color: var(--text-muted);">Creating digital experiences that inspire and transform.</p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 1rem;">Quick Links</h4>
+                <ul style="list-style: none; color: var(--text-muted);">
+                    <li><a href="index.html" style="color: var(--text-muted); text-decoration: none; transition: var(--transition);">Home</a></li>
+                    <li><a href="blog.html" style="color: var(--text-muted); text-decoration: none; transition: var(--transition);">Blog</a></li>
+                    <li><a href="gallery.html" style="color: var(--text-muted); text-decoration: none; transition: var(--transition);">Gallery</a></li>
+                    <li><a href="contact.html" style="color: var(--text-muted); text-decoration: none; transition: var(--transition);">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 1rem;">Connect</h4>
+                <div class="social-links">
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-dribbble"></i></a>
+                </div>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); color: var(--text-muted);">
+            <p>&copy; 2024 Nexus. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Gallery Data
+        const galleryItems = [
+            {
+                id: 1,
+                title: "Modern Dashboard UI",
+                category: "web",
+                image: "https://images.unsplash.com/photo-1558655146-9f40138edfeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+                description: "Clean and intuitive dashboard design with real-time analytics",
+                date: "Jan 15, 2024",
+                author: "Alex Designer",
+                likes: 248,
+                views: 1200
+            },
+            {
+                id: 2,
+                title: "Banking App Interface",
+                category: "mobile",
+                image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80",
+                description: "Secure and user-friendly banking application design",
+                date: "Jan 12, 2024",
+                author: "Sam Developer",
+                likes: 189,
+                views: 980
+            },
+            // Add more items as needed
+        ];
+
+        // Filter Functionality
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const galleryItemsElements = document.querySelectorAll('.gallery-item');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                // Add active class to clicked button
+                button.classList.add('active');
+                
+                const filter = button.dataset.filter;
+                
+                // Filter items
+                galleryItemsElements.forEach(item => {
+                    if (filter === 'all' || item.dataset.category === filter) {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 100);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.8)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
+
+        // Lightbox Functionality
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.querySelector('.lightbox-img');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxCategory = document.getElementById('lightbox-category');
+        const lightboxClose = document.querySelector('.lightbox-close');
+        const lightboxPrev = document.querySelector('.lightbox-prev');
+        const lightboxNext = document.querySelector('.lightbox-next');
+        
+        let currentImageIndex = 0;
+        const images = Array.from(document.querySelectorAll('.gallery-img'));
+
+        // Open lightbox
+        galleryItemsElements.forEach((item, index) => {
+            item.addEventListener('click', () => {
+                currentImageIndex = index;
+                updateLightbox();
+                lightbox.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Close lightbox
+        lightboxClose.addEventListener('click', () => {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        });
+
+        // Click outside to close
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Navigation
+        lightboxPrev.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+            updateLightbox();
+        });
+
+        lightboxNext.addEventListener('click', () => {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            updateLightbox();
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (!lightbox.classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    lightbox.classList.remove('active');
+                    document.body.style.overflow = 'auto';
+                    break;
+                case 'ArrowLeft':
+                    currentImageIndex = (currentImageIndex - 1 + images.length) % images.length;
+                    updateLightbox();
+                    break;
+                case 'ArrowRight':
+                    currentImageIndex = (currentImageIndex + 1) % images.length;
+                    updateLightbox();
+                    break;
+            }
+        });
+
+        function updateLightbox() {
+            const currentItem = galleryItemsElements[currentImageIndex];
+            lightboxImg.src = currentItem.querySelector('.gallery-img').src;
+            lightboxTitle.textContent = currentItem.querySelector('.gallery-title').textContent;
+            lightboxCategory.textContent = currentItem.querySelector('.gallery-category').textContent;
+        }
+
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.createElement('div');
+            particlesContainer.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: -1;
+            `;
+            document.body.appendChild(particlesContainer);
+
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.cssText = `
+                    position: absolute;
+                    width: ${Math.random() * 4 + 1}px;
+                    height: ${Math.random() * 4 + 1}px;
+                    background: ${Math.random() > 0.5 ? 'var(--accent)' : '#4d79ff'};
+                    border-radius: 50%;
+                    top: ${Math.random() * 100}vh;
+                    left: ${Math.random() * 100}vw;
+                    opacity: ${Math.random() * 0.5 + 0.1};
+                    animation: floatParticle ${Math.random() * 20 + 10}s linear infinite;
+                `;
+                
+                const keyframes = `
+                    @keyframes floatParticle {
+                        0% {
+                            transform: translate(0, 0) rotate(0deg);
+                        }
+                        25% {
+                            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(90deg);
+                        }
+                        50% {
+                            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(180deg);
+                        }
+                        75% {
+                            transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(270deg);
+                        }
+                        100% {
+                            transform: translate(0, 0) rotate(360deg);
+                        }
+                    }
+                `;
+                
+                const styleSheet = document.createElement('style');
+                styleSheet.textContent = keyframes;
+                document.head.appendChild(styleSheet);
+                
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            createParticles();
+            
+            // Navbar scroll effect
+            window.addEventListener('scroll', () => {
+                const navbar = document.querySelector('.navbar');
+                if (window.scrollY > 100) {
+                    navbar.style.backdropFilter = 'blur(20px)';
+                    navbar.style.background = 'rgba(10, 10, 10, 0.95)';
+                } else {
+                    navbar.style.backdropFilter = 'blur(20px)';
+                    navbar.style.background = 'rgba(10, 10, 10, 0.8)';
+                }
+            });
+
+            // Smooth scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    if(targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if(targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 100,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
