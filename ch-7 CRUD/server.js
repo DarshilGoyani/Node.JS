@@ -38,7 +38,42 @@ app.post("/insertUser",(req,res) => {
     console.log(user);
     user.id = Math.floor(Math.random() * 1000)
     allUsers.push(user)
+    res.redirect("/",{
+        users:allUsers
+    })
+})
+
+app.post("/updateUser",(req,res) => {
+    console.log(req.body.id);
+    console.log(allUsers);
+    
+    
+    allUsers = allUsers.map((user) => {
+        if (user.id == req.body.id) {
+            return req.body;
+        }
+        else{
+            return user
+        }
+    })
+    
+    console.log(allUsers);
+    
     res.redirect("/")
+    
+})
+
+app.get("/editUser", (req,res) => {
+
+
+    const user = allUsers.find((user) => user.id == req.query.id)
+    if (!user) {
+        return res.redirect('/')
+    }
+    res.render('updateForm',{user}
+
+    )
+    
 })
 
 app.get('/',(req,res) => {

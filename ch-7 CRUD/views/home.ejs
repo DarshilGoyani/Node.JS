@@ -3,12 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello <%= name%></title>
+    <title>User List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(120deg, #f6d365, #fda085);
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            color: #fff;
+            margin: 30px 0;
+        }
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: auto;
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        th, td {
+            padding: 15px;
+            text-align: center;
+        }
+        th {
+            background: #f78ca0;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #ffe0e9;
+        }
+        tr:hover {
+            background: #ffd6dc;
+        }
+        a {
+            text-decoration: none;
+            color: white;
+        }
+        button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background: #f78ca0;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #f25c6d;
+        }
+        .add-user {
+            display: block;
+            width: 120px;
+            margin: 20px auto;
+            text-align: center;
+            background: #6a82fb;
+        }
+        .add-user:hover {
+            background: #fc5c7d;
+        }
+    </style>
 </head>
 <body>
-    
-
-    <table border="1" align="center">
+    <h1>User List</h1>
+    <table>
         <tr>
             <th>ID</th>
             <th>Name</th>
@@ -16,22 +76,22 @@
             <th>Password</th>
             <th>Phone</th>
             <th>Address</th>
+            <th>Edit</th>
+            <th>Delete</th>
         </tr>
-
-        <% users.map((user,index) => { %>
-            <tr>
-                <td><%= user.id %></td>
-                <td><%= user.name %></td>
-                <td><%= user.email %></td>
-                <td><%= user.password %></td>
-                <td><%= user.phone %></td>
-                <td><%= user.address %></td>
-                <td><button><a href="/editUser?id=<%= user.id%>">Edit</a></button></td>
-                <td><button><a href="/deleteUser?id=<%= user.id%>">Delete</a></button></td>
-            </tr>  
-        <%})%>
+        <% users.map(user => { %>
+        <tr>
+            <td><%= user.id %></td>
+            <td><%= user.name %></td>
+            <td><%= user.email %></td>
+            <td><%= user.password %></td>
+            <td><%= user.phone %></td>
+            <td><%= user.address %></td>
+            <td><button><a href="/editUser?id=<%= user.id %>">Edit</a></button></td>
+            <td><button><a href="/deleteUser?id=<%= user.id %>">Delete</a></button></td>
+        </tr>
+        <% }) %>
     </table>
-
-    <button align="center"><a href="/form">Add User</a></button>
+    <button class="add-user"><a href="/form">Add User</a></button>
 </body>
 </html>
