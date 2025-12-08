@@ -4,6 +4,7 @@ let PORT = 8000;
 let app = express();
 
 app.set("view engine", "ejs")
+app.use(express.urlencoded())
 
 let allUsers = [
     {
@@ -32,16 +33,38 @@ let allUsers = [
     },
 ]
 
-app.get('/',(re1,res) => {
+app.post("/insertUser",(req,res) => {
+    const user = req.body;
+    console.log(user);
+    user.id = Math.floor(Math.random() * 1000)
+    allUsers.push(user)
+    res.redirect("/")
+})
+
+app.get('/',(req,res) => {
     res.render("home",{
-        admin:false,
-        name: "Darshil",
         users:allUsers,
+        name:"Darshil"
     });
 })
 
-app.get('/about',(req,res) => {
-    res.render("about")
+app.get('/form',(req,res) => {
+    res.render("form")
+})
+
+app.get('/deleteUser',(req,res) => {
+    console.log(req.query.id);
+    
+    allUsers = allUsers.filter((user) => user.id != req.query.id)
+    console.log(allUsers);
+    
+    res.redirect('/')
+})
+
+app.get('/homePage',(req,res) => {
+    res.render("home",{
+        users:allUsers,
+    })
 })
 
 app.listen(PORT,(err) => {

@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Hello <%= name%></title>
 </head>
 <body>
-    <h1 align="center">hello <%= name%></h1>
+    
 
     <table border="1" align="center">
         <tr>
@@ -26,8 +26,12 @@
                 <td><%= user.password %></td>
                 <td><%= user.phone %></td>
                 <td><%= user.address %></td>
+                <td><button><a href="/editUser?id=<%= user.id%>">Edit</a></button></td>
+                <td><button><a href="/deleteUser?id=<%= user.id%>">Delete</a></button></td>
             </tr>  
         <%})%>
     </table>
+
+    <button align="center"><a href="/form">Add User</a></button>
 </body>
 </html>
