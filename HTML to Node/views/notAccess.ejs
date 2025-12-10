@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Access Denied | Nexus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #1a1a1a;
+            --accent: #ff4d94;
+            --accent-secondary: #4d79ff;
+            --text: #f0f0f0;
+            --text-muted: #888;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 8vw, 6rem);
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--accent), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            transition: var(--transition);
+            cursor: pointer;
+            background: linear-gradient(45deg, var(--accent), #ff2987);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255,77,148,0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255,77,148,0.4);
+        }
+
+        /* Background Elements */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            top: 10%;
+            left: 10%;
+            animation: floatOrb 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-secondary) 0%, transparent 70%);
+            bottom: 10%;
+            right: 10%;
+            animation: floatOrb 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, -100px) rotate(90deg); }
+            50% { transform: translate(0, -200px) rotate(180deg); }
+            75% { transform: translate(-100px, -100px) rotate(270deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-elements">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <div class="container">
+        <h1>You Can't Access This Website</h1>
+        <p>Oops! Looks like you don't have permission to enter this digital realm.</p>
+        <a href="index.html" class="btn"><i class="fas fa-home"></i> Back to Home</a>
+    </div>
+</body>
+</html>

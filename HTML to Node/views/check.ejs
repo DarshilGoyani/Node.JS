@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Verification | Nexus</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        :root {
+            --primary: #0a0a0a;
+            --secondary: #1a1a1a;
+            --accent: #ff4d94;
+            --accent-light: #ff85b3;
+            --accent-secondary: #4d79ff;
+            --text: #f0f0f0;
+            --text-muted: #888;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        body {
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: var(--text);
+            min-height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Background Elements */
+        .bg-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            top: 10%;
+            left: 10%;
+            animation: floatOrb 20s ease-in-out infinite;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, var(--accent-secondary) 0%, transparent 70%);
+            bottom: 10%;
+            right: 10%;
+            animation: floatOrb 25s ease-in-out infinite reverse;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(100px, -100px) rotate(90deg); }
+            50% { transform: translate(0, -200px) rotate(180deg); }
+            75% { transform: translate(-100px, -100px) rotate(270deg); }
+        }
+
+        /* Container */
+        .container {
+            text-align: center;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* Form */
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+
+        input {
+            padding: 1rem 1.5rem;
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            background: var(--secondary);
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 77, 148, 0.2);
+        }
+
+        button {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            background: linear-gradient(45deg, var(--accent), var(--accent-secondary));
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 77, 148, 0.3);
+        }
+
+        /* Floating Numbers */
+        .floating-numbers {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .number {
+            position: absolute;
+            font-size: 1.5rem;
+            color: var(--accent);
+            opacity: 0.3;
+            animation: floatNumber 10s linear infinite;
+        }
+
+        @keyframes floatNumber {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-200px); }
+            100% { transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-elements">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="floating-numbers" id="floatingNumbers"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <h1>Verify Your Age</h1>
+        <p>Please enter your age to continue:</p>
+        <form method="get" action="/">
+            <input type="number" name="age" placeholder="Enter your age" required>
+            <button type="submit"><i class="fas fa-check"></i> Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Floating numbers particles
+        const container = document.getElementById('floatingNumbers');
+        for(let i=0; i<30; i++){
+            const num = document.createElement('div');
+            num.className = 'number';
+            num.style.left = Math.random()*100 + 'vw';
+            num.style.top = Math.random()*100 + 'vh';
+            num.style.fontSize = (Math.random()*20+10) + 'px';
+            num.style.animationDuration = (Math.random()*15+5) + 's';
+            num.textContent = Math.floor(Math.random()*10);
+            container.appendChild(num);
+        }
+    </script>
+</body>
+</html>
