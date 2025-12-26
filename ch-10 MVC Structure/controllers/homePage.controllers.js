@@ -6,4 +6,11 @@ const aboutPage = (req,res) => {
     return res.render("about")
 }
 
-module.exports = {homePage,aboutPage}
+const employeePage = (req,res) => {
+    return res.render("empTable")
+}
+
+const empForm = (req,res) => {
+    return res.render("empForm")
+}
+module.exports = {homePage,aboutPage,employeePage,empForm}
