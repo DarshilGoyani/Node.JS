@@ -6,7 +6,6 @@ const router = express.Router();
 
 router.get("/", homePage)
 router.get("/about", aboutPage)
-router.get("/employee", employeePage)
-router.get("/empForm", empForm)
+router.use("/employee" , require("./employee.routes")) 
 
 module.exports = router;

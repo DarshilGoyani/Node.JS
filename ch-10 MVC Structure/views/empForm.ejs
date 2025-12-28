@@ -8,7 +8,7 @@
 <body>
     <h1>Employee Form</h1>
 
-    <form method="post" action="/addEmp">
+    <form method="post" action="/employee/addEmp">
         <label>Name</label><br>
         <input type="text" name="name" placeholder="emp name"><br>
         
@@ -16,7 +16,7 @@
         <input type="email" name="email" placeholder="emp email"><br>
         
         <label>Phone</label><br>
-        <input type="number" name="number" placeholder="emp number"><br>
+        <input type="number" name="phone" placeholder="emp number"><br>
         
         <label>Salary</label><br>
         <input type="number" name="salary" placeholder="emp salary"><br>
@@ -27,12 +27,12 @@
         <input type="radio" name="gender"><label>Other</label><br>
 
         <label>Employee Designation</label>
-        <select>
-            <option value="">Owner</option>
-            <option value="">Manager</option>
-            <option value="">HR</option>
-            <option value="">Employee</option>
-            <option value="">Peon</option>
+        <select name="rolw">
+            <option value="Owner">Owner</option>
+            <option value="Manager">Manager</option>
+            <option value="HR">HR</option>
+            <option value="Employee">Employee</option>
+            <option value="Peon">Peon</option>
         </select>
 
         <button>Submit</button>

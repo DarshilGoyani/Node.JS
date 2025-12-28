@@ -1,13 +1,13 @@
 const express = require("express")
-const homeController = require("./controllers/homePage.controllers")
-const routes = require("./routes/index")
+const db = require("./config/db.config")
 const PORT = 8000;
 
 const app = express();
 
 app.set("view engine","ejs")
+app.use(express.urlencoded())
 
-app.use("/", routes)
+app.use("/", require("./routes/index.routes"))
 
 
 
