@@ -24,6 +24,10 @@ const empSchema = mongoose.Schema({
         type : String,
         require : true,
     },
+    hobby : {
+        type : Array,
+        require : true,
+    },
     role : {
         type : String,
         require : true,
@@ -31,4 +35,4 @@ const empSchema = mongoose.Schema({
 }) 
 
 
-module.exports = module.model("Employee", empSchema, "Employee")
+module.exports = mongoose.model("Employee", empSchema, "Employee")

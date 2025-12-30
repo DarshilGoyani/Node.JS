@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Employee | EmpManagePro</title>
+    <title>Edit Employee | EmpManagePro</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <!-- Font Awesome Icons -->
@@ -17,8 +17,8 @@
             --primary-color: #4361ee;
             --secondary-color: #3f37c9;
             --success-color: #4cc9f0;
-            --danger-color: #f72585;
             --warning-color: #f8961e;
+            --danger-color: #f72585;
             --light-color: #f8f9fa;
             --dark-color: #212529;
         }
@@ -55,7 +55,7 @@
         }
         
         .form-header {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            background: linear-gradient(135deg, var(--warning-color) 0%, #e68a00 100%);
             color: white;
             padding: 2rem;
             text-align: center;
@@ -87,6 +87,18 @@
             z-index: 1;
         }
         
+        .employee-id-badge {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: inline-block;
+            margin-top: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
         .form-header-icon {
             font-size: 3rem;
             margin-bottom: 1rem;
@@ -104,7 +116,7 @@
         
         .section-title {
             font-weight: 600;
-            color: var(--primary-color);
+            color: var(--warning-color);
             margin-bottom: 1.5rem;
             padding-bottom: 0.75rem;
             border-bottom: 2px solid #f0f2f5;
@@ -132,8 +144,8 @@
         }
         
         .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.15);
+            border-color: var(--warning-color);
+            box-shadow: 0 0 0 0.25rem rgba(248, 150, 30, 0.15);
         }
         
         .form-control-lg {
@@ -177,16 +189,16 @@
         }
         
         .form-check-input:checked + .form-check-card {
-            border-color: var(--primary-color);
-            background-color: rgba(67, 97, 238, 0.05);
-            color: var(--primary-color);
+            border-color: var(--warning-color);
+            background-color: rgba(248, 150, 30, 0.08);
+            color: var(--warning-color);
             font-weight: 500;
         }
         
         .form-check-input[type="radio"]:checked + .form-check-card {
-            border-color: var(--primary-color);
-            background-color: rgba(67, 97, 238, 0.08);
-            color: var(--primary-color);
+            border-color: var(--warning-color);
+            background-color: rgba(248, 150, 30, 0.12);
+            color: var(--warning-color);
         }
         
         .form-check-input[type="checkbox"]:checked + .form-check-card {
@@ -210,8 +222,8 @@
             border-top: 1px solid #f0f2f5;
         }
         
-        .btn-submit {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        .btn-update {
+            background: linear-gradient(135deg, var(--warning-color) 0%, #e68a00 100%);
             color: white;
             border: none;
             border-radius: 10px;
@@ -219,16 +231,16 @@
             font-weight: 600;
             font-size: 1rem;
             transition: all 0.3s;
-            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.25);
+            box-shadow: 0 4px 12px rgba(248, 150, 30, 0.25);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
         }
         
-        .btn-submit:hover {
+        .btn-update:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.35);
+            box-shadow: 0 6px 15px rgba(248, 150, 30, 0.35);
             color: white;
         }
         
@@ -252,6 +264,28 @@
             background-color: #e9ecef;
             color: #495057;
             border-color: #dee2e6;
+        }
+        
+        .btn-delete {
+            background-color: rgba(247, 37, 133, 0.1);
+            color: var(--danger-color);
+            border: 2px solid rgba(247, 37, 133, 0.2);
+            border-radius: 10px;
+            padding: 0.9rem 2rem;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-delete:hover {
+            background-color: var(--danger-color);
+            color: white;
+            border-color: var(--danger-color);
         }
         
         /* Form Validation Styles */
@@ -296,7 +330,7 @@
                 gap: 15px;
             }
             
-            .btn-submit, .btn-cancel {
+            .btn-update, .btn-cancel, .btn-delete {
                 width: 100%;
             }
         }
@@ -316,6 +350,23 @@
         .form-card {
             animation: fadeIn 0.5s ease-out;
         }
+        
+        /* Current Value Indicator */
+        .current-value {
+            background-color: #f8f9fa;
+            border-left: 4px solid var(--warning-color);
+            padding: 0.75rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .current-value i {
+            color: var(--warning-color);
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body>
@@ -324,26 +375,37 @@
             <!-- Form Header -->
             <div class="form-header">
                 <div class="form-header-icon">
-                    <i class="fas fa-user-plus"></i>
+                    <i class="fas fa-user-edit"></i>
                 </div>
-                <h1>Add New Employee</h1>
-                <p>Fill in the employee details below to add them to the system</p>
+                <h1>Edit Employee</h1>
+                <p>Update the details for <%= empData.name %></p>
+                <div class="employee-id-badge">
+                    <i class="fas fa-id-badge me-1"></i> Employee ID: <%= empData.id %>
+                </div>
             </div>
             
             <!-- Form Body -->
-            <form method="post" action="/employee/addEmp" class="form-body" id="employeeForm">
+            <form method="post" action="/employee/updateEmp" class="form-body" id="editEmployeeForm">
+                <!-- Hidden ID Field -->
+                <input type="hidden" name="id" value="<%= empData.id %>">
+                
                 <!-- Personal Information Section -->
                 <div class="form-section">
                     <h3 class="section-title">
                         <i class="fas fa-user-circle"></i> Personal Information
                     </h3>
                     
+                    <div class="current-value mb-3">
+                        <i class="fas fa-info-circle"></i>
+                        Currently editing: <strong><%= empData.name %></strong>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <label for="name" class="form-label">Full Name *</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                <input type="text" class="form-control form-control-lg" id="name" name="name" placeholder="Enter employee full name" required>
+                                <input type="text" class="form-control form-control-lg" id="name" name="name" value="<%= empData.name %>" placeholder="Enter employee full name" required>
                             </div>
                             <div class="invalid-feedback" id="nameError">Please enter a valid name</div>
                         </div>
@@ -352,7 +414,7 @@
                             <label for="email" class="form-label">Email Address *</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="employee@company.com" required>
+                                <input type="email" class="form-control form-control-lg" id="email" name="email" value="<%= empData.email %>" placeholder="employee@company.com" required>
                             </div>
                             <div class="invalid-feedback" id="emailError">Please enter a valid email address</div>
                         </div>
@@ -363,7 +425,7 @@
                             <label for="phone" class="form-label">Phone Number *</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                <input type="tel" class="form-control form-control-lg" id="phone" name="phone" placeholder="Enter 10-digit phone number" required>
+                                <input type="tel" class="form-control form-control-lg" id="phone" name="phone" value="<%= empData.phone %>" placeholder="Enter 10-digit phone number" required>
                             </div>
                             <div class="invalid-feedback" id="phoneError">Please enter a valid 10-digit phone number</div>
                         </div>
@@ -372,7 +434,7 @@
                             <label for="salary" class="form-label">Salary *</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-dollar-sign"></i></span>
-                                <input type="number" class="form-control form-control-lg" id="salary" name="salary" placeholder="0.00" step="0.01" min="0" required>
+                                <input type="number" class="form-control form-control-lg" id="salary" name="salary" value="<%= empData.salary %>" placeholder="0.00" step="0.01" min="0" required>
                             </div>
                             <div class="invalid-feedback" id="salaryError">Please enter a valid salary amount</div>
                         </div>
@@ -385,20 +447,25 @@
                         <i class="fas fa-venus-mars"></i> Gender
                     </h3>
                     
+                    <div class="current-value mb-3">
+                        <i class="fas fa-venus-mars"></i>
+                        Current: <strong><%= empData.gender %></strong>
+                    </div>
+                    
                     <div class="form-options-container">
-                        <input type="radio" value="Male" name="gender" id="genderMale" class="form-check-input" required>
+                        <input type="radio" value="Male" name="gender" id="genderMale" class="form-check-input" <%= empData.gender == "Male" ? "checked" : "" %> required>
                         <label for="genderMale" class="form-check-card">
                             <i class="fas fa-male"></i>
                             Male
                         </label>
                         
-                        <input type="radio" value="Female" name="gender" id="genderFemale" class="form-check-input" required>
+                        <input type="radio" value="Female" name="gender" id="genderFemale" class="form-check-input" <%= empData.gender == "Female" ? "checked" : "" %> required>
                         <label for="genderFemale" class="form-check-card">
                             <i class="fas fa-female"></i>
                             Female
                         </label>
                         
-                        <input type="radio" value="Other" name="gender" id="genderOther" class="form-check-input" required>
+                        <input type="radio" value="Other" name="gender" id="genderOther" class="form-check-input" <%= empData.gender == "Other" ? "checked" : "" %> required>
                         <label for="genderOther" class="form-check-card">
                             <i class="fas fa-user"></i>
                             Other
@@ -412,11 +479,31 @@
                     <h3 class="section-title">
                         <i class="fas fa-heart"></i> Hobbies & Interests
                     </h3>
+                    
+                    <% 
+                        // Parse hobbies from the database
+                        let currentHobbies = [];
+                        if (empData.hobby) {
+                            if (Array.isArray(empData.hobby)) {
+                                currentHobbies = empData.hobby;
+                            } else if (typeof empData.hobby === 'string') {
+                                currentHobbies = empData.hobby.split(',').map(h => h.trim());
+                            }
+                        }
+                    %>
+                    
+                    <div class="current-value mb-3">
+                        <i class="fas fa-heart"></i>
+                        Current: <strong><%= currentHobbies.join(', ') || 'None selected' %></strong>
+                    </div>
+                    
                     <p class="text-muted mb-3">Select all that apply</p>
                     
                     <div class="form-options-container">
-                        <% ["Cricket", "Games", "Uno", "Singing", "Dance", "Others"].map(hobby => { %>
-                            <input type="checkbox" value="<%= hobby %>" name="hobby" id="hobby<%= hobby.replace(/\s/g, '') %>" class="form-check-input">
+                        <% ["Cricket", "Games", "Uno", "Singing", "Dance", "Others"].map(hobby => { 
+                            const isChecked = currentHobbies.includes(hobby);
+                        %>
+                            <input type="checkbox" value="<%= hobby %>" name="hobby" id="hobby<%= hobby.replace(/\s/g, '') %>" class="form-check-input" <%= isChecked ? "checked" : "" %>>
                             <label for="hobby<%= hobby.replace(/\s/g, '') %>" class="form-check-card">
                                 <% 
                                     let iconClass = "fas fa-star";
@@ -431,6 +518,9 @@
                                 %>
                                 <i class="<%= iconClass %>"></i>
                                 <%= hobby %>
+                                <% if (isChecked) { %>
+                                    <span class="badge bg-success mt-1" style="font-size: 0.6rem;">SELECTED</span>
+                                <% } %>
                             </label>
                         <% }) %>
                     </div>
@@ -442,15 +532,20 @@
                         <i class="fas fa-briefcase"></i> Employee Designation
                     </h3>
                     
+                    <div class="current-value mb-3">
+                        <i class="fas fa-user-tie"></i>
+                        Current: <strong><%= empData.role %></strong>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-md-8">
                             <label for="role" class="form-label">Select Role *</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
                                 <select class="form-select form-control-lg" id="role" name="role" required>
-                                    <option value="" disabled selected>Select a role</option>
+                                    <option value="" disabled>Select a role</option>
                                     <% ["Owner", "Manager", "HR", "Employee", "Peon"].map(role => { %>
-                                        <option value="<%= role %>"><%= role %></option>
+                                        <option value="<%= role %>" <%= empData.role == role ? "selected" : "" %>><%= role %></option>
                                     <% }) %>
                                 </select>
                             </div>
@@ -461,11 +556,17 @@
                 
                 <!-- Form Actions -->
                 <div class="form-actions">
-                    <a href="javascript:history.back()" class="btn-cancel">
-                        <i class="fas fa-arrow-left"></i> Cancel
-                    </a>
-                    <button type="submit" class="btn-submit">
-                        <i class="fas fa-user-plus"></i> Add Employee
+                    <div class="d-flex gap-2">
+                        <a href="javascript:history.back()" class="btn-cancel">
+                            <i class="fas fa-arrow-left"></i> Cancel
+                        </a>
+                        <a href="/employee/deleteBtn/?empId=<%= empData.id %>" class="btn-delete" id="deleteBtn" onclick="return confirmDelete()">
+                            <i class="fas fa-trash-alt"></i> Delete
+                        </a>
+                    </div>
+                    
+                    <button type="submit" class="btn-update">
+                        <i class="fas fa-save"></i> Update Employee
                     </button>
                 </div>
             </form>
@@ -477,7 +578,7 @@
     
     <script>
         // Form Validation
-        document.getElementById('employeeForm').addEventListener('submit', function(event) {
+        document.getElementById('editEmployeeForm').addEventListener('submit', function(event) {
             let isValid = true;
             
             // Name validation
@@ -554,7 +655,7 @@
         });
         
         // Real-time validation for inputs
-        document.querySelectorAll('#employeeForm input, #employeeForm select').forEach(input => {
+        document.querySelectorAll('#editEmployeeForm input, #editEmployeeForm select').forEach(input => {
             input.addEventListener('input', function() {
                 if (this.classList.contains('is-invalid')) {
                     this.classList.remove('is-invalid');
@@ -589,6 +690,63 @@
             
             card.addEventListener('mouseleave', function() {
                 this.style.transform = 'translateY(0)';
+            });
+        });
+        
+        // Confirm delete action
+        function confirmDelete() {
+            const employeeName = "<%= empData.name %>";
+            return confirm(`Are you sure you want to delete ${employeeName}? This action cannot be undone.`);
+        }
+        
+        // Highlight changed fields
+        document.addEventListener('DOMContentLoaded', function() {
+            const originalValues = {
+                name: "<%= empData.name %>",
+                email: "<%= empData.email %>",
+                phone: "<%= empData.phone %>",
+                salary: "<%= empData.salary %>",
+                gender: "<%= empData.gender %>",
+                role: "<%= empData.role %>"
+            };
+            
+            const inputs = document.querySelectorAll('#editEmployeeForm input, #editEmployeeForm select');
+            inputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const fieldName = this.name;
+                    const currentValue = this.type === 'checkbox' ? this.checked : this.value;
+                    
+                    if (fieldName === 'hobby') {
+                        // Handle checkboxes separately
+                        return;
+                    }
+                    
+                    if (fieldName in originalValues) {
+                        const originalValue = originalValues[fieldName];
+                        
+                        if (currentValue !== originalValue) {
+                            this.style.borderColor = 'var(--warning-color)';
+                            this.style.backgroundColor = 'rgba(248, 150, 30, 0.05)';
+                        } else {
+                            this.style.borderColor = '';
+                            this.style.backgroundColor = '';
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Initialize tooltips
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteBtn = document.getElementById('deleteBtn');
+            deleteBtn.title = "Delete this employee permanently";
+            
+            // Show current values on hover for checkboxes
+            document.querySelectorAll('.form-check-card').forEach(card => {
+                const checkbox = card.previousElementSibling;
+                if (checkbox.checked) {
+                    card.style.boxShadow = '0 0 0 2px var(--success-color)';
+                }
             });
         });
     </script>

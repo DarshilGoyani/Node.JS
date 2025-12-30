@@ -1,6 +1,6 @@
 const express = require("express")
 
-const {homePage, aboutPage, employeePage, empForm} = require("../controllers/homePage.controllers")
+const {homePage, aboutPage} = require("../controllers/homePage.controllers")
 
 const router = express.Router();
 
