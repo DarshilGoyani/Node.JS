@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit <%= gameId.name %> - Console</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+    <style>
+        :root {
+            --google-green: #01875f;
+            --google-blue: #1a73e8;
+            --bg-color: #f8f9fa;
+            --border-color: #dadce0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--bg-color);
+            color: #202124;
+        }
+
+        /* Reusing the Card Style from Add Page */
+        .form-card {
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 2px rgba(60,64,67,0.3);
+            overflow: hidden;
+        }
+
+        .card-header-custom {
+            padding: 24px;
+            border-bottom: 1px solid var(--border-color);
+            background: white;
+        }
+
+        .form-control, .form-select {
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            padding: 12px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--google-blue);
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+
+        .form-floating > label {
+            padding-left: 12px;
+            color: #5f6368;
+        }
+
+        /* Improved Edit Upload Zone */
+        .upload-zone {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 10px;
+            background-color: white;
+            position: relative;
+            transition: all 0.2s;
+        }
+
+        .preview-img {
+            border-radius: 6px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            object-fit: cover;
+            background-color: #f1f3f4;
+        }
+
+        .btn-upload-trigger {
+            margin-top: 10px;
+            font-size: 13px;
+            color: var(--google-blue);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .btn-upload-trigger:hover {
+            text-decoration: underline;
+        }
+
+        /* Hidden file input, triggered by label */
+        .hidden-file-input {
+            display: none;
+        }
+
+        .btn-submit {
+            background-color: var(--google-green);
+            border: none;
+            padding: 10px 24px;
+            font-weight: 500;
+        }
+        
+        .btn-submit:hover {
+            background-color: #016e4d;
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-light bg-white border-bottom mb-4">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <a class="text-decoration-none text-secondary d-flex align-items-center" href="/">
+                    <i class="bi bi-arrow-left me-2"></i> Dashboard
+                </a>
+                <span class="mx-2 text-muted">/</span>
+                <span class="fw-bold text-dark">Manage <%= gameId.name %></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container pb-5" style="max-width: 800px;">
+        <form method="post" action="/updateGame" enctype="multipart/form-data">
+            
+            <input type="hidden" value="<%= gameId['_id']%>" name="id">
+
+            <div class="form-card">
+                <div class="card-header-custom d-flex justify-content-between align-items-center">
+                    <div>
+                        <h4 class="m-0">Store Listing</h4>
+                        <p class="text-secondary small m-0 mt-1">Update your game's details and assets.</p>
+                    </div>
+                    <span class="badge bg-light text-dark border">ID: <%= gameId['_id'] %></span>
+                </div>
+
+                <div class="p-4">
+                    <div class="row g-4">
+                        
+                        <div class="col-12">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="gameName" name="name" value="<%= gameId.name%>" placeholder="Game Name" required>
+                                <label for="gameName">Game Title</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="category" name="category" onchange="loadSubCategory()" required>
+                                    <option value="">Select Category</option>
+                                    <% 
+                                    let categories = ["action","adventure","arcade","puzzle","strategy","rpg","simulation","sports","casual","racing","educational","music"];
+                                    categories.forEach(cat => { 
+                                    %>
+                                        <option value="<%= cat %>" <%= gameId.category === cat ? "selected" : "" %> >
+                                            <%= cat.charAt(0).toUpperCase() + cat.slice(1) %>
+                                        </option>
+                                    <% }) %>
+                                </select>
+                                <label for="category">Category</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                <select class="form-select" id="subcategory" name="sub_category" required>
+                                    <option value="<%= gameId.sub_category %>"><%= gameId.sub_category %></option>
+                                </select>
+                                <label for="subcategory">Sub Category</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input type="number" class="form-control" name="rating" value="<%= gameId.rating%>" placeholder="Rating" step="0.1" min="0" max="5">
+                                <label>Rating</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12"><hr class="text-secondary opacity-25"></div>
+
+                        <div class="col-12">
+                            <h6 class="fw-bold mb-3">Graphic Assets</h6>
+                        </div>
+
+                        <div class="col-md-4">
+                            <p class="small text-secondary fw-bold mb-2">App Icon</p>
+                            <div class="upload-zone text-center">
+                                <img id="logoPreview" src="/<%= gameId.logo%>" class="preview-img" width="80" height="80">
+                                
+                                <input type="file" id="logoInput" name="logo" class="hidden-file-input" accept="image/*" onchange="previewFile(this, 'logoPreview')">
+                                <label for="logoInput" class="btn-upload-trigger d-block">
+                                    <i class="bi bi-pencil-square"></i> Change Icon
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-8">
+                            <p class="small text-secondary fw-bold mb-2">Feature Graphic</p>
+                            <div class="upload-zone text-center">
+                                <img id="bannerPreview" src="/<%= gameId.image%>" class="preview-img" style="width: 100%; height: 160px;">
+                                
+                                <input type="file" id="bannerInput" name="image" class="hidden-file-input" accept="image/*" onchange="previewFile(this, 'bannerPreview')">
+                                <label for="bannerInput" class="btn-upload-trigger d-block">
+                                    <i class="bi bi-pencil-square"></i> Change Feature Graphic
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="bg-light p-3 border-top d-flex justify-content-end gap-2">
+                    <a href="/" class="btn btn-outline-secondary border-0">Discard Changes</a>
+                    <button type="submit" class="btn btn-primary btn-submit">Update Game</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // 1. Data Structure for Categories
+        const categoryData = {
+            action: ["Shooter", "Fighting", "Platformer", "Survival", "Stealth"],
+            adventure: ["Story Based", "Open World", "Exploration", "Point & Click"],
+            arcade: ["Retro", "Endless Runner", "Classic", "Brick Breaker"],
+            puzzle: ["Logic", "Word", "Math", "Brain Teasers", "Jigsaw"],
+            strategy: ["RTS", "Turn Based", "Tower Defense", "War Strategy"],
+            rpg: ["Action RPG", "MMORPG", "Turn Based RPG", "Fantasy RPG"],
+            simulation: ["Life Simulation", "City Building", "Farming", "Flight Simulation"],
+            sports: ["Cricket", "Football", "Basketball", "Racing", "Tennis"],
+            casual: ["Time Killer", "Family", "Kids", "Simple Games"],
+            racing: ["Car Racing", "Bike Racing", "Drag Racing", "Offroad Racing"],
+            educational: ["Learning", "Quiz", "Kids Education", "Coding Games"],
+            music: ["Rhythm", "Piano", "Guitar", "Dance"]
+        };
+
+        // 2. Load Subcategories logic
+        function loadSubCategory(preSelectedValue = null) {
+            const categorySelect = document.getElementById("category");
+            const subCatSelect = document.getElementById("subcategory");
+            const selectedCategory = categorySelect.value;
+            
+            // Clear current options
+            subCatSelect.innerHTML = "<option value=''>Select Sub Category</option>";
+
+            if (selectedCategory && categoryData[selectedCategory]) {
+                categoryData[selectedCategory].forEach(item => {
+                    const option = document.createElement("option");
+                    // Ensure formatting matches your DB (lowercase with underscores if needed, or raw text)
+                    // Based on your previous code, let's keep the raw text as the visible part
+                    // and formatted value if your DB stores it that way. 
+                    // Assuming DB stores specific format:
+                    const valueFormat = item.toLowerCase().replace(/ /g, "_"); // e.g. "Story Based" -> "story_based"
+                    
+                    option.value = valueFormat; 
+                    option.text = item;
+
+                    // Check if this option should be selected
+                    // We check against the passed preSelectedValue OR the current select value
+                    if (preSelectedValue && (valueFormat === preSelectedValue || item === preSelectedValue)) {
+                        option.selected = true;
+                    }
+
+                    subCatSelect.appendChild(option);
+                });
+            }
+        }
+
+        // 3. Image Preview Logic
+        function previewFile(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const file = input.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 4. Initialize on Page Load
+        window.onload = function() {
+            // Pass the EJS variable for the current sub_category to the function
+            // Note: We use quotes because it's a string
+            const currentSubCat = "<%= gameId.sub_category %>";
+            loadSubCategory(currentSubCat);
+        };
+    </script>
+</body>
+</html>       

@@ -1,4 +1,4 @@
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 const EMP = require("../model/emp.model")
 
 const addEmp = async (req, res) => {
@@ -20,6 +20,7 @@ const deleteEmp = async (req,res) => {
 }
 
 const updateEmp = async (req,res) => {
+    
     const updatedEmp = await EMP.findByIdAndUpdate(req.body.id,req.body, {new:true});
     
     return res.redirect("/employee/");

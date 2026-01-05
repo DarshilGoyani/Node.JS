@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Play Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --google-green: #01875f;
+            --google-green-bg: #e6f3ef;
+            --text-primary: #202124;
+            --text-secondary: #5f6368;
+            --border-color: #dadce0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #ffffff;
+            color: var(--text-primary);
+            padding-top: 64px; /* Space for fixed navbar */
+        }
+
+        /* --- 1. Header & Navigation --- */
+        .navbar {
+            height: 64px;
+            background: white;
+            z-index: 1000;
+        }
+
+        .navbar-brand {
+            font-size: 22px;
+            color: #5f6368;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-link {
+            color: var(--text-secondary);
+            font-weight: 500;
+            padding: 20px 16px !important; /* Height to match navbar */
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: var(--google-green);
+        }
+
+        .nav-link.active {
+            color: var(--google-green);
+            border-bottom-color: var(--google-green);
+        }
+
+        .nav-icons .btn-icon {
+            color: #5f6368;
+            font-size: 1.2rem;
+            padding: 8px;
+            margin-left: 8px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background-color: #e8eaed; /* Placeholder grey */
+            border-radius: 50%;
+            margin-left: 16px;
+            background-image: url('https://lh3.googleusercontent.com/ogw/AKPQZvw...=s32-c-mo'); /* Optional: Put real URL */
+            background-size: cover;
+        }
+
+        /* --- 2. Filter Chips (Windows, Phone...) --- */
+        .filter-bar {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding-bottom: 4px;
+            margin-bottom: 30px;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        .filter-bar::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 16px;
+            height: 32px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: white;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            margin-right: 12px;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+
+        .chip:hover {
+            background-color: #f1f3f4;
+        }
+
+        .chip.active {
+            background-color: var(--google-green-bg);
+            color: var(--google-green);
+            border-color: transparent;
+        }
+
+        /* --- 3. Card Design --- */
+        .section-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 0;
+            color: var(--text-primary);
+        }
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        .game-banner-wrapper {
+            position: relative;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+        }
+
+        .game-banner {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s;
+        }
+        
+        .game-banner-wrapper:hover .game-banner {
+            transform: scale(1.02);
+        }
+
+        .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 56px;
+            height: 56px;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            opacity: 0; /* Hidden initially */
+            transition: opacity 0.2s;
+        }
+
+        .game-banner-wrapper:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .app-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 12px;
+            object-fit: cover;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .game-title {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+            line-height: 20px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .game-category {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+
+        .game-rating {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            margin-top: 2px;
+        }
+
+        /* Subtle Admin Menu */
+        .admin-options {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 10;
+        }
+        .btn-admin {
+            background: rgba(255,255,255,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg fixed-top border-bottom border-light">
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center">
+                <a class="navbar-brand me-4" href="#">
+                    <img src="https://imgs.search.brave.com/9bnz4YpMLN3vK5BVrzaKeBlOmkUlZzhmJAP8aUjvYr4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9wbmdo/ZHByby5jb20vd3At/Y29udGVudC90aGVt/ZXMvcG5naGRwcm8v/ZG93bmxvYWQvc29j/aWFsLW1lZGlhLWFu/ZC1icmFuZHMvZ29v/Z2xlLXBsYXktc3Rv/cmUtbG9nby1pY29u/LnBuZw" width="40" height="40" alt="">
+                    Google Play
+                </a>
+                
+                <div class="navbar-nav d-none d-lg-flex flex-row">
+                    <a class="nav-link active" href="#">Games</a>
+                    <a class="nav-link" href="#">Apps</a>
+                    <a class="nav-link" href="#">Books</a>
+                    <a class="nav-link" href="#">Kids</a>
+                </div>
+            </div>
+
+            <div class="d-flex align-items-center ms-auto nav-icons">
+                <a href="#" class="btn-icon"><i class="bi bi-search"></i></a>
+                <a href="#" class="btn-icon"><i class="bi bi-question-circle"></i></a>
+                <div class="user-avatar overflow-hidden">
+                    <img src="https://ui-avatars.com/api/?name=User&background=random" width="32" height="32" alt="Profile">
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="max-width: 1200px; margin-top: 24px;">
+
+        <div class="filter-bar d-flex align-items-center">
+            <a href="#" class="chip rounded-pill active">
+                <i class="bi bi-display"></i> Windows
+            </a>
+            <a href="#" class="chip rounded-pill">
+                <i class="bi bi-phone"></i> Phone
+            </a>
+            <a href="#" class="chip rounded-pill">
+                <i class="bi bi-tablet"></i> Tablet
+            </a>
+            <a href="#" class="chip rounded-pill">
+                <i class="bi bi-tv"></i> TV
+            </a>
+            <a href="#" class="chip rounded-pill">
+                <i class="bi bi-laptop"></i> Chromebook
+            </a>
+            <a href="#" class="chip rounded-pill">
+                <i class="bi bi-watch"></i> Watch
+            </a>
+            <div class="ms-auto d-flex">
+                 <a href="/addgamepage" class="btn btn-outline-success btn-sm rounded-pill px-3">
+                    <i class="bi bi-plus-lg"></i> Add Game
+                </a>
+            </div>
+        </div>
+
+        <h2 class="section-title">Discover top picks</h2>
+        <p class="section-subtitle">Google Play Games on PC</p>
+
+        <div class="row g-4"> <% allGames.map((game, index) => { %>
+                <div class="col-12 col-md-6 col-lg-4">
+                    
+                    <div class="game-banner-wrapper">
+                        <img src="<%= game.image %>" class="game-banner" alt="Banner">
+                        <div class="play-overlay">
+                            <i class="bi bi-play-fill"></i>
+                        </div>
+                        
+                        <div class="dropdown admin-options">
+                            <button class="btn-admin" data-bs-toggle="dropdown">
+                                <i class="bi bi-three-dots-vertical"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow border-0">
+                                <li><a class="dropdown-item" href="/editbtn/<%= game.id %>"><i class="bi bi-pencil me-2"></i>Edit</a></li>
+                                <li><a class="dropdown-item text-danger" href="/deletebtn/<%= game.id %>"><i class="bi bi-trash me-2"></i>Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-start mt-3">
+                        <img src="<%= game.logo %>" class="app-icon flex-shrink-0" alt="Icon">
+                        
+                        <div class="ms-3">
+                            <div class="game-title"><%= game.name %></div>
+                            <div class="game-category">
+                                <%= game.category %> <span class="mx-1">•</span> <%= game.sub_category %>
+                            </div>
+                            <div class="game-rating">
+                                <%= game.rating %> <i class="bi bi-star-fill" style="font-size: 10px;"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            <% }) %>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
