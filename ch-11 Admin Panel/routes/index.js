@@ -1,10 +1,13 @@
 const express = require("express");
-const { homepage, formPage, tablePage, insertAdmin ,upload, deleteAdmin, updateAdminPage, updateAdmin} = require("../controller/emp.controller");
+const { homepage, formPage, tablePage, insertAdmin ,upload, deleteAdmin, updateAdminPage, updateAdmin, loginPage, checkAdmin, logOut} = require("../controller/emp.controller");
 
 
 const router = express.Router();
 
-router.get("/",homepage)
+router.get("/",loginPage)
+router.post("/loginAdmin",checkAdmin)
+router.get("/logOut",logOut)
+router.get("/dashboard",homepage)
 router.get("/formPage",formPage)
 router.get("/tablePage",tablePage)
 router.post("/insertAdmin",upload.single("profile_image"), insertAdmin)
