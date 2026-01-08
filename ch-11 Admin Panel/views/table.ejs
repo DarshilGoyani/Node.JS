@@ -26,24 +26,26 @@
                         <th>City</th>
                         <th>Message</th>
                         <th>Image</th>
-                        <th>Action</th>
+                        <%if(admin.email == "darshilgoyani05@gmail.com"){%><th>Action</th>  <%} %>
+
+                        
                       </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
 
-                      <% allAdmin.map((admin,index) => { %>
+                      <% allAdmin.map((subadmin,index) => { %>
 
                         <tr>
                         <td><%= index+1%></td>
-                        <td><%= admin.fname%></td>
-                        <td><%= admin.lname%></td>
-                        <td><%= admin.email%></td>
-                        <td><%= admin.password%></td>
-                        <td><%= admin.phone%></td>
-                        <td><%= admin.gender%></td>
-                        <td><%= admin.hobby%></td>
-                        <td><%= admin.city%></td>
-                        <td><%= admin.message%></td>
+                        <td><%= subadmin.fname%></td>
+                        <td><%= subadmin.lname%></td>
+                        <td><%= subadmin.email%></td>
+                        <td><%= subadmin.password%></td>
+                        <td><%= subadmin.phone%></td>
+                        <td><%= subadmin.gender%></td>
+                        <td><%= subadmin.hobby%></td>
+                        <td><%= subadmin.city%></td>
+                        <td><%= subadmin.message%></td>
 
                         <td>
                           <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
@@ -52,45 +54,48 @@
                               data-popup="tooltip-custom"
                               data-bs-placement="top"
                               class="avatar avatar-xs pull-up"
-                              title="<%= admin.fname +' '+ admin.lname %>"
+                              title="<%= subadmin.fname +' '+ subadmin.lname %>"
                             >
-                              <img src="<%= admin.profile_image%>" alt="Avatar" class="rounded-circle" />
+                              <img src="<%= subadmin.profile_image%>" alt="Avatar" class="rounded-circle" />
                             </li>
                             <li
                               data-bs-toggle="tooltip"
                               data-popup="tooltip-custom"
                               data-bs-placement="top"
                               class="avatar avatar-xs pull-up"
-                              title="<%= admin.fname +' '+ admin.lname %>"
+                              title="<%= subadmin.fname +' '+ subadmin.lname %>"
                             >
-                              <img src="<%= admin.profile_image%>" alt="Avatar" class="rounded-circle" />
+                              <img src="<%= subadmin.profile_image%>" alt="Avatar" class="rounded-circle" />
                             </li>
                             <li
                               data-bs-toggle="tooltip"
                               data-popup="tooltip-custom"
                               data-bs-placement="top"
                               class="avatar avatar-xs pull-up"
-                              title="<%= admin.fname +' '+ admin.lname %>"
+                              title="<%= subadmin.fname +' '+ subadmin.lname %>"
                             >
-                              <img src="<%= admin.profile_image%>" alt="Avatar" class="rounded-circle" />
+                              <img src="<%= subadmin.profile_image%>" alt="Avatar" class="rounded-circle" />
                             </li>
                           </ul>
                         </td>
-                        <td>
-                          <div class="dropdown">
-                            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
-                              <i class="bx bx-dots-vertical-rounded"></i>
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="/updateAdmin/<%= admin.id%>"
-                                ><i class="bx bx-edit-alt me-1"></i> Edit</a
-                              >
-                              <a class="dropdown-item" href="/deleteAdmin/<%= admin.id%>"
-                                ><i class="bx bx-trash me-1"></i> Delete</a
-                              >
+                        <%if(admin.email == "darshilgoyani05@gmail.com"){%>
+                          <td>
+                            <div class="dropdown">
+                              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                              </button>
+                              <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/updateAdmin/<%= subadmin.id%>"
+                                  ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                                >
+                                <a class="dropdown-item" href="/deleteAdmin/<%= subadmin.id%>"
+                                  ><i class="bx bx-trash me-1"></i> Delete</a
+                                >
+                              </div>
                             </div>
-                          </div>
-                        </td>
+                          </td>  
+                        <%} %>
+                        
                       </tr>
 
 

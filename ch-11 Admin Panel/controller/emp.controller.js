@@ -44,28 +44,35 @@ const logOut = (req,res) => {
 }
 
 const homepage = async (req,res) => {
+
+    const admin = await Admin.findById(req.cookies.adminId);
+
     if (req.cookies.adminId == undefined) {
         console.log("Admin not found");
         return res.redirect("/")
     }
-    return res.render("dashboard")
+
+    return res.render("dashboard",{admin})
 }
 
-const formPage = (req,res) => {
+const formPage = async (req,res) => {
+    const admin = await Admin.findById(req.cookies.adminId);
     if (req.cookies.adminId == undefined) {
         console.log("Admin not found");
         return res.redirect("/")
     }
-    return res.render("form")
+    return res.render("form",{admin})
 }
 
 const tablePage = async (req,res) => {
+    const admin = await Admin.findById(req.cookies.adminId);
+
     if (req.cookies.adminId == undefined) {
         console.log("Admin not found");
         return res.redirect("/")
     }
     const allAdmin = await Admin.find();
-    return res.render("table",{allAdmin})
+    return res.render("table",{allAdmin , admin})
 }
 
 const insertAdmin = async (req, res) => {
@@ -82,6 +89,8 @@ const insertAdmin = async (req, res) => {
 };
 
 const deleteAdmin = async (req, res) => {
+    const admin = await Admin.findById(req.cookies.adminId);
+
     if (req.cookies.adminId == undefined) {
         console.log("Admin not found");
         return res.redirect("/")
@@ -99,12 +108,14 @@ const deleteAdmin = async (req, res) => {
 };
 
 const updateAdminPage = async (req,res) => {
+    const admin = await Admin.findById(req.cookies.adminId);
+
     if (req.cookies.adminId == undefined) {
         console.log("Admin not found");
         return res.redirect("/")
     }
     const updateAdmin = await Admin.findById(req.params.id); 
-    return res.render("edit",{updateAdmin})
+    return res.render("edit",{updateAdmin,admin})
 }
 
 const updateAdmin = async (req, res) => {
