@@ -1,5 +1,5 @@
 <!-- header -->
-<%- include("header")%>
+<%- include("../header")%>
 
 
 <!-- Content wrapper -->
@@ -25,6 +25,8 @@
                               name="id"
                               value="<%= updateAdmin.id %>"
                             />
+                            <!-- isprofile -->
+                              <input type="hidden" name="isProfile" value="<%= isProfile %>">
                         <!-- fname -->
                         <div class="mb-3">
                           <label class="form-label" for="basic-icon-default-fullname">First Name</label>
@@ -86,7 +88,7 @@
                         </div>
 
                         <!-- password -->
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                           <label class="form-label" for="basic-icon-default-password">Password</label>
                           <div class="input-group input-group-merge">
                             <span class="input-group-text"><i class='bx  bx-lock'></i> </span>
@@ -102,7 +104,7 @@
                             />
                           </div>
                           <div class="form-text">You can use letters, numbers & periods</div>
-                        </div>
+                        </div> -->
 
 
                         <!-- phone -->
@@ -215,4 +217,4 @@
 
 
 <!-- footer -->
-<%- include("footer")%>
+<%- include("../footer")%>

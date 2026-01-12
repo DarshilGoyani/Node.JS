@@ -14,10 +14,18 @@ const storage = multer.diskStorage({
 
 const upload = multer({storage});
 
-const loginPage = (req,res) => {
-    return res.render("auth/login")
-}
 
+// login page
+const loginPage = (req, res) => {
+
+    if (req.cookies.adminId) {
+        return res.redirect("/dashboard");
+    }
+
+    return res.render("auth/login");
+};
+
+// login adnmin
 const checkAdmin = async (req,res) => {
     console.log(req.body);
 
@@ -38,11 +46,13 @@ const checkAdmin = async (req,res) => {
     return res.redirect("/dashboard")
 }
 
+// log out admin
 const logOut = (req,res) => {
     res.clearCookie("adminId");
     return res.redirect("/")
 }
 
+// dashboard page
 const homepage = async (req,res) => {
 
     const admin = await Admin.findById(req.cookies.adminId);
@@ -55,15 +65,17 @@ const homepage = async (req,res) => {
     return res.render("dashboard",{admin})
 }
 
+// form page
 const formPage = async (req,res) => {
     const admin = await Admin.findById(req.cookies.adminId);
     if (req.cookies.adminId == undefined) {
         console.log("Admin not found");
         return res.redirect("/")
     }
-    return res.render("form",{admin})
+    return res.render("admin/form",{admin})
 }
 
+// table page
 const tablePage = async (req,res) => {
     const admin = await Admin.findById(req.cookies.adminId);
 
@@ -71,10 +83,12 @@ const tablePage = async (req,res) => {
         console.log("Admin not found");
         return res.redirect("/")
     }
-    const allAdmin = await Admin.find();
-    return res.render("table",{allAdmin , admin})
+    let allAdmin = await Admin.find();
+    allAdmin = allAdmin.filter((subadmin) => subadmin.email != admin.email);
+    return res.render("admin/table",{allAdmin , admin})
 }
 
+// add new admin
 const insertAdmin = async (req, res) => {
 
     if (req.file) {
@@ -88,6 +102,7 @@ const insertAdmin = async (req, res) => {
     return res.redirect("/");
 };
 
+// delete admin
 const deleteAdmin = async (req, res) => {
     const admin = await Admin.findById(req.cookies.adminId);
 
@@ -107,6 +122,7 @@ const deleteAdmin = async (req, res) => {
     return res.redirect("/tablePage");
 };
 
+// update admin page
 const updateAdminPage = async (req,res) => {
     const admin = await Admin.findById(req.cookies.adminId);
 
@@ -114,10 +130,11 @@ const updateAdminPage = async (req,res) => {
         console.log("Admin not found");
         return res.redirect("/")
     }
-    const updateAdmin = await Admin.findById(req.params.id); 
-    return res.render("edit",{updateAdmin,admin})
+    const updateAdmin = await Admin.findById(req.query.id); 
+    return res.render("admin/edit",{updateAdmin,admin,isProfile: req.query.isProfile})
 }
 
+// update admin logic
 const updateAdmin = async (req, res) => {
 
     const oldAdmin = await Admin.findById(req.body.id);
@@ -131,11 +148,63 @@ const updateAdmin = async (req, res) => {
 
     await Admin.findByIdAndUpdate(req.body.id,req.body,{ new: true }
     );
-
-    return res.redirect("/tablePage");
+    
+    if (req.body.isProfile == "false") {
+        return res.redirect("/tablePage");
+    }
+    else{
+        return res.redirect("profile")
+    }
+    
 };
 
+// change password
+const changePasswordPage = (req,res) => {
+    res.render("auth/changePassword")
+}
+
+const changePassword = async (req,res) => {
+    const admin = await Admin.findById(req.cookies.adminId);
+
+    if (req.cookies.adminId == undefined) {
+        console.log("Admin not found");
+        return res.redirect("/")
+    }
+    // console.log(req.body);
+    const {current_pass,new_pass,confirm_pass} = req.body;
+    console.log(current_pass);
+    console.log(new_pass);
+    console.log(confirm_pass);
+    
+    if (admin.password != current_pass) {
+        console.log("old and new password doesnt match");
+        return res.redirect("/changePasswordPage")
+    }
+    
+    if (new_pass == current_pass) {
+        console.log("old and new password should not be same");
+        return res.redirect("/changePasswordPage")
+    }
+    
+    if (new_pass != confirm_pass) {
+        console.log("new and confirm password doesnt match");
+        return res.redirect("/changePasswordPage")
+    }
+    
+    await Admin.findByIdAndUpdate(admin.id,{password : new_pass})
+    res.redirect("/")
+}
+
+// view profile page
+const viewProfilePage = async (req,res) => {
+    const admin = await Admin.findById(req.cookies.adminId);
+
+    if (req.cookies.adminId == undefined) {
+        console.log("Admin not found");
+        return res.redirect("/")
+    }
+    return res.render("admin/profile",{admin})
+}
 
 
-
-module.exports = {homepage,formPage,tablePage,insertAdmin,upload,deleteAdmin,updateAdminPage,updateAdmin,loginPage,checkAdmin,logOut}
+module.exports = {homepage,formPage,tablePage,insertAdmin,upload,deleteAdmin,updateAdminPage,updateAdmin,loginPage,checkAdmin,logOut,changePasswordPage,changePassword,viewProfilePage}

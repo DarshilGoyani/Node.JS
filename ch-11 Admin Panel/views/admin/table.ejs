@@ -1,6 +1,6 @@
 
 <!-- header -->
-<%- include("header") %>
+<%- include("../header") %>
 
 
 <!-- Content wrapper -->
@@ -11,7 +11,7 @@
 
               <!-- Hoverable Table rows -->
               <div class="card" >
-                <div class="table-responsive text-nowrap" style="min-height: 200px;">
+                <div class="table-responsive text-nowrap" >
                   <table class="table table-hover" >
                     <thead>
                       <tr align="center">
@@ -45,7 +45,7 @@
                         <td><%= subadmin.gender%></td>
                         <td><%= subadmin.hobby%></td>
                         <td><%= subadmin.city%></td>
-                        <td><%= subadmin.message%></td>
+                        <td class="text-wrap"><%= subadmin.message%></td>
 
                         <td>
                           <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
@@ -85,7 +85,7 @@
                                 <i class="bx bx-dots-vertical-rounded"></i>
                               </button>
                               <div class="dropdown-menu">
-                                <a class="dropdown-item" href="/updateAdmin/<%= subadmin.id%>"
+                                <a class="dropdown-item" href="/updateAdmin?id=<%= subadmin.id%>&isProfile=false"
                                   ><i class="bx bx-edit-alt me-1"></i> Edit</a
                                 >
                                 <a class="dropdown-item" href="/deleteAdmin/<%= subadmin.id%>"
@@ -112,4 +112,4 @@
 
 
 <!-- footer -->
-<%- include("footer") %>
+<%- include("../footer") %>
