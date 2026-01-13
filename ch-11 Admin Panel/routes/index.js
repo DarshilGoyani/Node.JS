@@ -1,5 +1,5 @@
 const express = require("express");
-const { homepage, formPage, tablePage, insertAdmin ,upload, deleteAdmin, updateAdminPage, updateAdmin, loginPage, checkAdmin, logOut, changePasswordPage, changePassword, viewProfilePage} = require("../controller/emp.controller");
+const { homepage, formPage, tablePage, insertAdmin ,upload, deleteAdmin, updateAdminPage, updateAdmin, loginPage, checkAdmin, logOut, changePasswordPage, changePassword, viewProfilePage, forgotPasswordPage, forgotPassword} = require("../controller/emp.controller");
 
 
 const router = express.Router();
@@ -10,6 +10,11 @@ router.post("/loginAdmin",checkAdmin)
 
 // log out
 router.get("/logOut",logOut)
+
+// forgot password
+router.get("/forgotPasswordPage",forgotPasswordPage)
+router.post("/forgotPassword",forgotPassword)
+
 
 // dashboard page
 router.get("/dashboard",homepage)
