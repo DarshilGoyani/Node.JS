@@ -1,0 +1,81 @@
+<%- include("../header")%>
+
+<div class="card-body pt-12">
+          <div class="user-avatar-section">
+            <div class=" d-flex align-items-center flex-column">
+              <img class="img-fluid rounded mb-4" src="<%= admin.profile_image%>" height="120" width="120" alt="User avatar">
+              <div class="user-info text-center">
+                <h5><%= admin.fname%> <%= admin.lname%></h5>
+                <span class="badge bg-label-secondary">Author</span>
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-around flex-wrap my-6 gap-0 gap-md-3 gap-lg-4">
+            <div class="d-flex align-items-center me-5 gap-4">
+              <div class="avatar">
+                <div class="avatar-initial bg-label-primary rounded w-px-40 h-px-40">
+                  <i class="icon-base bx bx-check icon-lg"></i>
+                </div>
+              </div>
+              <div>
+                <h5 class="mb-0">1.23k</h5>
+                <span>Task Done</span>
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-4">
+              <div class="avatar">
+                <div class="avatar-initial bg-label-primary rounded w-px-40 h-px-40">
+                  <i class="icon-base bx bx-customize icon-lg"></i>
+                </div>
+              </div>
+              <div>
+                <h5 class="mb-0">568</h5>
+                <span>Project Done</span>
+              </div>
+            </div>
+          </div>
+          <h5 class="pb-4 border-bottom mb-4">Details</h5>
+          <div class="info-container">
+            <ul class="list-unstyled mb-6">
+              <li class="mb-2">
+                <span class="h6">Name:</span>
+                <span><%= admin.fname%> <%= admin.lname%></span>
+              </li>
+              <li class="mb-2">
+                <span class="h6">Email:</span>
+                <span><%= admin.email%></span>
+              </li>
+              <li class="mb-2">
+                  <span class="h6">Gender:</span>
+                  <span><%= admin.gender%></span>
+                </li>
+                <li class="mb-2">
+                    <span class="h6">Contact:</span>
+                    <span><%= admin.phone%></span>
+                </li>
+                <li class="mb-2">
+                    <span class="h6">Hobby:</span>
+                    <span><%= admin.hobby%></span>
+                </li>
+                <li class="mb-2">
+                    <span class="h6">City:</span>
+                    <span><%= admin.city%></span>
+                </li>
+                <li class="mb-2">
+                    <span class="h6">Message:</span>
+                    <span><%= admin.message%></span>
+                </li>
+                <li class="mb-2">
+                  <span class="h6">Status:</span>
+                  <span>Active</span>
+                </li>
+            </ul>
+            <div class="d-flex justify-content-center">
+              <a href="/updateAdmin/:id/<%= admin._id %>?returnTo=/profile" class="btn btn-primary me-4" >Edit</a>
+              <a href="javascript:;" class="btn btn-label-danger suspend-user">Suspend</a>
+            </div>
+          </div>
+        </div>
+
+
+<%- include("../footer")%>

@@ -1,0 +1,115 @@
+
+<!-- header -->
+<%- include("../header") %>
+
+
+<!-- Content wrapper -->
+          <div class="content-wrapper">
+            <!-- Content -->
+
+            <div class="container-xxl flex-grow-1 container-p-y">
+
+              <!-- Hoverable Table rows -->
+              <div class="card" >
+                <div class="table-responsive text-nowrap" >
+                  <table class="table table-hover" >
+                    <thead>
+                      <tr align="center">
+                        <th>No.</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Phone</th>
+                        <th>Gender</th>
+                        <th>Hobby</th>
+                        <th>City</th>
+                        <th>Message</th>
+                        <th>Image</th>
+                        <%if(admin.email == "darshilgoyani05@gmail.com"){%><th>Action</th>  <%} %>
+
+                        
+                      </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+
+                      <% allAdmin.map((subadmin,index) => { %>
+
+                        <tr>
+                        <td><%= index+1%></td>
+                        <td><%= subadmin.fname%></td>
+                        <td><%= subadmin.lname%></td>
+                        <td><%= subadmin.email%></td>
+                        <td><%= subadmin.password%></td>
+                        <td><%= subadmin.phone%></td>
+                        <td><%= subadmin.gender%></td>
+                        <td><%= subadmin.hobby%></td>
+                        <td><%= subadmin.city%></td>
+                        <td class="text-wrap"><%= subadmin.message%></td>
+
+                        <td>
+                          <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                            <li
+                              data-bs-toggle="tooltip"
+                              data-popup="tooltip-custom"
+                              data-bs-placement="top"
+                              class="avatar avatar-xs pull-up"
+                              title="<%= subadmin.fname +' '+ subadmin.lname %>"
+                            >
+                              <img src="<%= subadmin.profile_image%>" alt="Avatar" class="rounded-circle" />
+                            </li>
+                            <li
+                              data-bs-toggle="tooltip"
+                              data-popup="tooltip-custom"
+                              data-bs-placement="top"
+                              class="avatar avatar-xs pull-up"
+                              title="<%= subadmin.fname +' '+ subadmin.lname %>"
+                            >
+                              <img src="<%= subadmin.profile_image%>" alt="Avatar" class="rounded-circle" />
+                            </li>
+                            <li
+                              data-bs-toggle="tooltip"
+                              data-popup="tooltip-custom"
+                              data-bs-placement="top"
+                              class="avatar avatar-xs pull-up"
+                              title="<%= subadmin.fname +' '+ subadmin.lname %>"
+                            >
+                              <img src="<%= subadmin.profile_image%>" alt="Avatar" class="rounded-circle" />
+                            </li>
+                          </ul>
+                        </td>
+                        <%if(admin.email == "darshilgoyani05@gmail.com"){%>
+                          <td>
+                            <div class="dropdown">
+                              <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                <i class="bx bx-dots-vertical-rounded"></i>
+                              </button>
+                              <div class="dropdown-menu">
+                                <a class="dropdown-item" href="/updateAdmin?id=<%= subadmin.id%>&isProfile=false"
+                                  ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                                >
+                                <a class="dropdown-item" href="/deleteAdmin/<%= subadmin.id%>"
+                                  ><i class="bx bx-trash me-1"></i> Delete</a
+                                >
+                              </div>
+                            </div>
+                          </td>  
+                        <%} %>
+                        
+                      </tr>
+
+
+                      <% }) %>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <!--/ Hoverable Table rows -->
+
+              
+            </div>
+            <!-- / Content -->
+
+
+<!-- footer -->
+<%- include("../footer") %>

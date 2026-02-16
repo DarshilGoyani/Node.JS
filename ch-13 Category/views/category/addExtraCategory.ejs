@@ -1,0 +1,110 @@
+<!-- header -->
+<%- include("../header")%>
+
+<!-- Content wrapper -->
+<div class="content-wrapper">
+  <!-- Content -->
+
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Category Management/</span> Add Extra Category</h4>
+
+    <!-- Basic Layout -->
+    <div class="row">
+      
+      <div class="col-xl-6 mx-auto">
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Extra Category Information</h5>
+          </div>
+          <div class="card-body">
+            <form method="post" action="/addExtraCategory" enctype="multipart/form-data">
+
+              <!-- Select Category -->
+              <div class="mb-3">
+                <label class="form-label" for="parent-category">Select Category</label>
+                <select class="form-select" name="categoryId" id="parent-category" aria-label="Select Category" required>
+                  <option value="">Select a category</option>
+                  <% if(categories && categories.length > 0) { %>
+                    <% categories.map((category) => { %>
+                      <option value="<%= category._id %>"><%= category.name %></option>
+                    <% }) %>
+                  <% } %>
+                </select>
+              </div>
+
+              <!-- Select Sub Category -->
+              <div class="mb-3">
+                <label class="form-label" for="parent-subcategory">Select Sub Category</label>
+                <select class="form-select" name="subCategoryId" id="parent-subcategory" aria-label="Select Sub Category" required>
+                  <option value="">Select a sub category</option>
+                  <% if(subCategories && subCategories.length > 0) { %>
+                    <% subCategories.map((subCategory) => { %>
+                      <option value="<%= subCategory._id %>" data-category="<%= subCategory.categoryId._id %>"><%= subCategory.name %></option>
+                    <% }) %>
+                  <% } %>
+                </select>
+              </div>
+
+              <!-- Extra Category Name -->
+              <div class="mb-3">
+                <label class="form-label" for="extracategory-name">Extra Category Name</label>
+                <div class="input-group input-group-merge">
+                  <span id="extracategory-name-icon" class="input-group-text">
+                    <i class="bx bx-category"></i>
+                  </span>
+                  <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    id="extracategory-name"
+                    placeholder="Enter extra category name"
+                    aria-label="Extra Category Name"
+                    aria-describedby="extracategory-name-icon"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Extra Category Image -->
+              <div class="mb-3">
+                <label for="extracategory-image" class="form-label">Extra Category Image</label>
+                <input class="form-control" name="image" type="file" id="extracategory-image" accept="image/*" />
+              </div>
+
+              <button type="submit" class="btn btn-primary">Add Extra Category</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / Content -->
+
+</div>
+
+<!-- footer -->
+<%- include("../footer")%>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const categorySelect = document.getElementById('parent-category');
+  const subCategorySelect = document.getElementById('parent-subcategory');
+  
+  categorySelect.addEventListener('change', function() {
+    const selectedCategoryId = this.value;
+    
+    // Reset subcategory dropdown
+    subCategorySelect.innerHTML = '<option value="">Select a sub category</option>';
+    
+    if (selectedCategoryId) {
+      // Filter subcategories based on selected category
+      const subCategories = subCategorySelect.querySelectorAll('option[data-category]');
+      subCategories.forEach(function(option) {
+        if (option.dataset.category === selectedCategoryId) {
+          subCategorySelect.appendChild(option);
+        }
+      });
+    }
+  });
+});
+</script>
