@@ -6,7 +6,46 @@
   <!-- Content -->
 
   <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Category Management/</span> View Extra Categories</h4>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="fw-bold py-3 mb-0"><span class="text-muted fw-light">Category Management/</span> View Extra Categories</h4>
+      <a href="/addExtraCategory" class="btn btn-primary">
+        <i class="bx bx-plus me-1"></i> Add Extra Category
+      </a>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <select id="categoryFilter" class="form-select">
+              <option value="">All Categories</option>
+              <% if(categories && categories.length > 0) { %>
+                <% categories.map((category) => { %>
+                  <option value="<%= category._id %>"><%= category.name %></option>
+                <% }) %>
+              <% } %>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <select id="subCategoryFilter" class="form-select">
+              <option value="">All Sub Categories</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <input type="text" id="extraCategorySearch" class="form-control" placeholder="Search extra categories...">
+          </div>
+          <div class="col-md-3">
+            <select id="extraCategorySort" class="form-select">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="name-asc">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Hoverable Table rows -->
     <div class="card">
@@ -74,3 +113,148 @@
 
 <!-- footer -->
 <%- include("../footer") %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const categoryFilter = document.getElementById('categoryFilter');
+  const subCategoryFilter = document.getElementById('subCategoryFilter');
+  const searchInput = document.getElementById('extraCategorySearch');
+  const sortSelect = document.getElementById('extraCategorySort');
+  const tableBody = document.querySelector('.table-border-bottom-0');
+  
+  // Safely parse JSON with error handling
+  let originalExtraCategories = [];
+  let allCategories = [];
+  let allSubCategories = [];
+  
+  try {
+    originalExtraCategories = JSON.parse('<%- JSON.stringify(extraCategories || []) %>');
+  } catch (e) {
+    console.error('Error parsing extraCategories:', e);
+  }
+  
+  try {
+    allCategories = JSON.parse('<%- JSON.stringify(categories || []) %>');
+  } catch (e) {
+    console.error('Error parsing categories:', e);
+  }
+  
+  try {
+    allSubCategories = JSON.parse('<%- JSON.stringify(subCategories || []) %>');
+  } catch (e) {
+    console.error('Error parsing subCategories:', e);
+  }
+  
+  // Populate sub categories based on selected category
+  function updateSubCategories() {
+    const selectedCategoryId = categoryFilter.value;
+    subCategoryFilter.innerHTML = '<option value="">All Sub Categories</option>';
+    
+    if (selectedCategoryId) {
+      const filteredSubCategories = allSubCategories.filter(sub => 
+        sub.categoryId && sub.categoryId._id === selectedCategoryId
+      );
+      
+      filteredSubCategories.forEach(sub => {
+        const option = document.createElement('option');
+        option.value = sub._id;
+        option.textContent = sub.name;
+        subCategoryFilter.appendChild(option);
+      });
+    } else {
+      allSubCategories.forEach(sub => {
+        const option = document.createElement('option');
+        option.value = sub._id;
+        option.textContent = sub.name;
+        subCategoryFilter.appendChild(option);
+      });
+    }
+  }
+  
+  function filterAndSortExtraCategories() {
+    const categoryFilterValue = categoryFilter.value;
+    const subCategoryFilterValue = subCategoryFilter.value;
+    const searchTerm = searchInput.value.toLowerCase();
+    const sortBy = sortSelect.value;
+    
+    let filteredExtraCategories = originalExtraCategories.filter(extraCategory => {
+      const matchesCategory = !categoryFilterValue || (extraCategory.categoryId && extraCategory.categoryId._id === categoryFilterValue);
+      const matchesSubCategory = !subCategoryFilterValue || (extraCategory.subCategoryId && extraCategory.subCategoryId._id === subCategoryFilterValue);
+      const matchesSearch = extraCategory.name.toLowerCase().includes(searchTerm);
+      return matchesCategory && matchesSubCategory && matchesSearch;
+    });
+    
+    // Sort extra categories
+    filteredExtraCategories.sort((a, b) => {
+      switch(sortBy) {
+        case 'newest':
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        case 'oldest':
+          return new Date(a.createdAt) - new Date(b.createdAt);
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        default:
+          return 0;
+      }
+    });
+    
+    renderExtraCategories(filteredExtraCategories);
+  }
+  
+  function renderExtraCategories(extraCategories) {
+    if (extraCategories.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center">
+            No extra categories found
+          </td>
+        </tr>
+      `;
+      return;
+    }
+    
+    tableBody.innerHTML = extraCategories.map((extraCategory, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${extraCategory.categoryId ? extraCategory.categoryId.name : 'N/A'}</strong></td>
+        <td>${extraCategory.subCategoryId ? extraCategory.subCategoryId.name : 'N/A'}</td>
+        <td>${extraCategory.name}</td>
+        <td>
+          ${extraCategory.image 
+            ? `<img src="${extraCategory.image}" alt="Extra Category Image" class="rounded-circle" width="40" height="40" />`
+            : '<span class="badge bg-secondary">No Image</span>'
+          }
+        </td>
+        <td>
+          <div class="dropdown">
+            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+              <i class="bx bx-dots-vertical-rounded"></i>
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/editExtraCategory?id=${extraCategory._id}">
+                <i class="bx bx-edit-alt me-1"></i> Edit
+              </a>
+              <a class="dropdown-item" href="/deleteExtraCategory/${extraCategory._id}" onclick="return confirm('Are you sure you want to delete this extra category?')">
+                <i class="bx bx-trash me-1"></i> Delete
+              </a>
+            </div>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+  
+  categoryFilter.addEventListener('change', function() {
+    updateSubCategories();
+    filterAndSortExtraCategories();
+  });
+  subCategoryFilter.addEventListener('change', filterAndSortExtraCategories);
+  searchInput.addEventListener('input', filterAndSortExtraCategories);
+  sortSelect.addEventListener('change', filterAndSortExtraCategories);
+  
+  // Initialize sub categories
+  updateSubCategories();
+});
+</script>

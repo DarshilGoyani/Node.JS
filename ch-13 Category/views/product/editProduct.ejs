@@ -1,0 +1,307 @@
+<!-- header -->
+<%- include("../header")%>
+
+<!-- Content wrapper -->
+<div class="content-wrapper">
+  <!-- Content -->
+
+  <div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Product Management/</span> Edit Product</h4>
+
+    <!-- Basic Layout -->
+    <div class="row">
+      
+      <div class="col-xl-8 mx-auto">
+        <div class="card mb-4">
+          <div class="card-header d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Edit Product Information</h5>
+          </div>
+          <div class="card-body">
+            <form method="post" action="/updateProduct/<%= product._id %>" enctype="multipart/form-data">
+
+              <!-- Select Category -->
+              <div class="mb-3">
+                <label class="form-label" for="product-category">Select Category</label>
+                <select class="form-select" name="categoryId" id="product-category" aria-label="Select Category" required>
+                  <option value="">Select a category</option>
+                  <% if(categories && categories.length > 0) { %>
+                    <% categories.map((category) => { %>
+                      <option value="<%= category._id %>" <%= product.categoryId && product.categoryId._id.toString() === category._id.toString() ? 'selected' : '' %>><%= category.name %></option>
+                    <% }) %>
+                  <% } %>
+                </select>
+              </div>
+
+              <!-- Select Sub Category -->
+              <div class="mb-3">
+                <label class="form-label" for="product-subcategory">Select Sub Category</label>
+                <select class="form-select" name="subCategoryId" id="product-subcategory" aria-label="Select Sub Category" required>
+                  <option value="">Select a sub category</option>
+                  <% if(subCategories && subCategories.length > 0) { %>
+                    <% subCategories.map((subCategory) => { %>
+                      <option value="<%= subCategory._id %>" <%= product.subCategoryId && product.subCategoryId._id.toString() === subCategory._id.toString() ? 'selected' : '' %>><%= subCategory.name %></option>
+                    <% }) %>
+                  <% } %>
+                </select>
+              </div>
+
+              <!-- Select Extra Category -->
+              <div class="mb-3">
+                <label class="form-label" for="product-extracategory">Select Extra Category</label>
+                <select class="form-select" name="extraCategoryId" id="product-extracategory" aria-label="Select Extra Category" required>
+                  <option value="">Select an extra category</option>
+                  <% if(extraCategories && extraCategories.length > 0) { %>
+                    <% extraCategories.map((extraCategory) => { %>
+                      <option value="<%= extraCategory._id %>" <%= product.extraCategoryId && product.extraCategoryId._id.toString() === extraCategory._id.toString() ? 'selected' : '' %>><%= extraCategory.name %></option>
+                    <% }) %>
+                  <% } %>
+                </select>
+              </div>
+
+              <!-- Product Name -->
+              <div class="mb-3">
+                <label class="form-label" for="product-name">Product Name</label>
+                <div class="input-group input-group-merge">
+                  <span id="product-name-icon" class="input-group-text">
+                    <i class="bx bx-package"></i>
+                  </span>
+                  <input
+                    type="text"
+                    name="name"
+                    class="form-control"
+                    id="product-name"
+                    placeholder="Enter product name"
+                    aria-label="Product Name"
+                    aria-describedby="product-name-icon"
+                    value="<%= product.name %>"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Product Price -->
+              <div class="mb-3">
+                <label class="form-label" for="product-price">Product Price</label>
+                <div class="input-group input-group-merge">
+                  <span class="input-group-text">$</span>
+                  <input
+                    type="number"
+                    name="price"
+                    class="form-control"
+                    id="product-price"
+                    placeholder="0.00"
+                    aria-label="Product Price"
+                    step="0.01"
+                    min="0"
+                    value="<%= product.price %>"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Product Stock -->
+              <div class="mb-3">
+                <label class="form-label" for="product-stock">Product Stock</label>
+                <div class="input-group input-group-merge">
+                  <span id="product-stock-icon" class="input-group-text">
+                    <i class="bx bx-box"></i>
+                  </span>
+                  <input
+                    type="number"
+                    name="stock"
+                    class="form-control"
+                    id="product-stock"
+                    placeholder="Enter stock quantity"
+                    aria-label="Product Stock"
+                    aria-describedby="product-stock-icon"
+                    min="0"
+                    value="<%= product.stock %>"
+                    required
+                  />
+                </div>
+              </div>
+
+              <!-- Product Description -->
+              <div class="mb-3">
+                <label class="form-label" for="product-description">Product Description</label>
+                <textarea
+                  name="description"
+                  class="form-control"
+                  id="product-description"
+                  placeholder="Enter product description"
+                  rows="4"
+                  required
+                ><%= product.description %></textarea>
+              </div>
+
+              <!-- Product Status -->
+              <div class="mb-3">
+                <label class="form-label" for="product-status">Product Status</label>
+                <select class="form-select" name="status" id="product-status" required>
+                  <option value="Active" <%= product.status === 'Active' ? 'selected' : '' %>>Active</option>
+                  <option value="Inactive" <%= product.status === 'Inactive' ? 'selected' : '' %>>Inactive</option>
+                </select>
+              </div>
+
+              <!-- Current Product Image -->
+              <div class="mb-3">
+                <label class="form-label">Current Product Image</label>
+                <div class="d-flex align-items-center">
+                  <% if(product.image) { %>
+                    <img src="<%= product.image %>" alt="Current Product Image" class="rounded-circle me-3" width="60" height="60" />
+                    <span class="text-muted">Current image</span>
+                  <% } else { %>
+                    <span class="badge bg-secondary">No Image</span>
+                  <% } %>
+                </div>
+              </div>
+
+              <!-- Product Image -->
+              <div class="mb-3">
+                <label for="product-image" class="form-label">Update Product Image (Optional)</label>
+                <input class="form-control" name="image" type="file" id="product-image" accept="image/*" />
+                <small class="text-muted">Leave empty to keep current image</small>
+              </div>
+
+              <button type="submit" class="btn btn-primary">Update Product</button>
+              <a href="/viewProduct" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- / Content -->
+
+</div>
+
+<!-- footer -->
+<%- include("../footer")%>
+
+<!-- Hidden data elements to store data for JavaScript -->
+<div id="data-container" style="display: none;">
+  <div id="categories-data" data-categories='<%= JSON.stringify(categories || []) %>'></div>
+  <div id="subcategories-data" data-subcategories='<%= JSON.stringify(subCategories || []) %>'></div>
+  <div id="extracategories-data" data-extracategories='<%= JSON.stringify(extraCategories || []) %>'></div>
+  <div id="current-product-data" data-product='<%= JSON.stringify(product || {}) %>'></div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const categorySelect = document.getElementById('product-category');
+  const subCategorySelect = document.getElementById('product-subcategory');
+  const extraCategorySelect = document.getElementById('product-extracategory');
+  
+  // Get data from hidden elements
+  const categoriesElement = document.getElementById('categories-data');
+  const subCategoriesElement = document.getElementById('subcategories-data');
+  const extraCategoriesElement = document.getElementById('extracategories-data');
+  const productElement = document.getElementById('current-product-data');
+  
+  let allCategories = [];
+  let allSubCategories = [];
+  let allExtraCategories = [];
+  let currentProduct = {};
+  
+  // Safely parse JSON with error handling
+  try {
+    const categoriesData = categoriesElement.getAttribute('data-categories');
+    allCategories = JSON.parse(categoriesData);
+  } catch (e) {
+    console.error('Error parsing categories:', e);
+    allCategories = [];
+  }
+  
+  try {
+    const subCategoriesData = subCategoriesElement.getAttribute('data-subcategories');
+    allSubCategories = JSON.parse(subCategoriesData);
+  } catch (e) {
+    console.error('Error parsing subCategories:', e);
+    allSubCategories = [];
+  }
+  
+  try {
+    const extraCategoriesData = extraCategoriesElement.getAttribute('data-extracategories');
+    allExtraCategories = JSON.parse(extraCategoriesData);
+  } catch (e) {
+    console.error('Error parsing extraCategories:', e);
+    allExtraCategories = [];
+  }
+  
+  try {
+    const productData = productElement.getAttribute('data-product');
+    currentProduct = JSON.parse(productData);
+  } catch (e) {
+    console.error('Error parsing product:', e);
+    currentProduct = {};
+  }
+  
+  console.log('Categories:', allCategories);
+  console.log('SubCategories:', allSubCategories);
+  console.log('ExtraCategories:', allExtraCategories);
+  console.log('Current Product:', currentProduct);
+  
+  // Update sub categories based on selected category
+  function updateSubCategories() {
+    const selectedCategoryId = categorySelect.value;
+    const currentSubCategoryId = currentProduct.subCategoryId ? currentProduct.subCategoryId._id : '';
+    
+    subCategorySelect.innerHTML = '<option value="">Select a sub category</option>';
+    extraCategorySelect.innerHTML = '<option value="">Select an extra category</option>';
+    
+    if (selectedCategoryId) {
+      const filteredSubCategories = allSubCategories.filter(sub => 
+        sub.categoryId && sub.categoryId._id === selectedCategoryId
+      );
+      
+      filteredSubCategories.forEach(sub => {
+        const option = document.createElement('option');
+        option.value = sub._id;
+        option.textContent = sub.name;
+        if (sub._id === currentSubCategoryId) {
+          option.selected = true;
+        }
+        subCategorySelect.appendChild(option);
+      });
+    }
+  }
+  
+  // Update extra categories based on selected sub category
+  function updateExtraCategories() {
+    const selectedSubCategoryId = subCategorySelect.value;
+    const currentExtraCategoryId = currentProduct.extraCategoryId ? currentProduct.extraCategoryId._id : '';
+    
+    extraCategorySelect.innerHTML = '<option value="">Select an extra category</option>';
+    
+    if (selectedSubCategoryId) {
+      const filteredExtraCategories = allExtraCategories.filter(extra => 
+        extra.subCategoryId && extra.subCategoryId._id === selectedSubCategoryId
+      );
+      
+      filteredExtraCategories.forEach(extra => {
+        const option = document.createElement('option');
+        option.value = extra._id;
+        option.textContent = extra.name;
+        if (extra._id === currentExtraCategoryId) {
+          option.selected = true;
+        }
+        extraCategorySelect.appendChild(option);
+      });
+    }
+  }
+  
+  categorySelect.addEventListener('change', function() {
+    updateSubCategories();
+    updateExtraCategories();
+  });
+  subCategorySelect.addEventListener('change', updateExtraCategories);
+  
+  // Initialize dropdowns based on current product
+  setTimeout(() => {
+    updateSubCategories();
+    setTimeout(() => {
+      updateExtraCategories();
+    }, 100);
+  }, 100);
+});
+</script>

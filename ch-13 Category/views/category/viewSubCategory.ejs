@@ -6,7 +6,41 @@
   <!-- Content -->
 
   <div class="container-xxl flex-grow-1 container-p-y">
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Category Management/</span> View Sub Categories</h4>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="fw-bold py-3 mb-0"><span class="text-muted fw-light">Category Management/</span> View Sub Categories</h4>
+      <a href="/addSubCategory" class="btn btn-primary">
+        <i class="bx bx-plus me-1"></i> Add Sub Category
+      </a>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+      <div class="card-body">
+        <div class="row g-3">
+          <div class="col-md-4">
+            <select id="categoryFilter" class="form-select">
+              <option value="">All Categories</option>
+              <% if(categories && categories.length > 0) { %>
+                <% categories.map((category) => { %>
+                  <option value="<%= category._id %>"><%= category.name %></option>
+                <% }) %>
+              <% } %>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <input type="text" id="subCategorySearch" class="form-control" placeholder="Search sub categories by name...">
+          </div>
+          <div class="col-md-4">
+            <select id="subCategorySort" class="form-select">
+              <option value="newest">Newest First</option>
+              <option value="oldest">Oldest First</option>
+              <option value="name-asc">Name (A-Z)</option>
+              <option value="name-desc">Name (Z-A)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- Hoverable Table rows -->
     <div class="card">
@@ -72,3 +106,104 @@
 
 <!-- footer -->
 <%- include("../footer") %>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const categoryFilter = document.getElementById('categoryFilter');
+  const searchInput = document.getElementById('subCategorySearch');
+  const sortSelect = document.getElementById('subCategorySort');
+  const tableBody = document.querySelector('.table-border-bottom-0');
+  
+  // Safely parse JSON with error handling
+  let originalSubCategories = [];
+  let allCategories = [];
+  
+  try {
+    originalSubCategories = JSON.parse('<%- JSON.stringify(subCategories || []) %>');
+  } catch (e) {
+    console.error('Error parsing subCategories:', e);
+  }
+  
+  try {
+    allCategories = JSON.parse('<%- JSON.stringify(categories || []) %>');
+  } catch (e) {
+    console.error('Error parsing categories:', e);
+  }
+  
+  function filterAndSortSubCategories() {
+    const categoryFilterValue = categoryFilter.value;
+    const searchTerm = searchInput.value.toLowerCase();
+    const sortBy = sortSelect.value;
+    
+    let filteredSubCategories = originalSubCategories.filter(subCategory => {
+      const matchesCategory = !categoryFilterValue || (subCategory.categoryId && subCategory.categoryId._id === categoryFilterValue);
+      const matchesSearch = subCategory.name.toLowerCase().includes(searchTerm);
+      return matchesCategory && matchesSearch;
+    });
+    
+    // Sort sub categories
+    filteredSubCategories.sort((a, b) => {
+      switch(sortBy) {
+        case 'newest':
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        case 'oldest':
+          return new Date(a.createdAt) - new Date(b.createdAt);
+        case 'name-asc':
+          return a.name.localeCompare(b.name);
+        case 'name-desc':
+          return b.name.localeCompare(a.name);
+        default:
+          return 0;
+      }
+    });
+    
+    renderSubCategories(filteredSubCategories);
+  }
+  
+  function renderSubCategories(subCategories) {
+    if (subCategories.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center">
+            No sub categories found
+          </td>
+        </tr>
+      `;
+      return;
+    }
+    
+    tableBody.innerHTML = subCategories.map((subCategory, index) => `
+      <tr>
+        <td>${index + 1}</td>
+        <td><strong>${subCategory.categoryId ? subCategory.categoryId.name : 'N/A'}</strong></td>
+        <td>${subCategory.name}</td>
+        <td>
+          ${subCategory.image 
+            ? `<img src="${subCategory.image}" alt="Sub Category Image" class="rounded-circle" width="40" height="40" />`
+            : '<span class="badge bg-secondary">No Image</span>'
+          }
+        </td>
+        <td>
+          <div class="dropdown">
+            <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+              <i class="bx bx-dots-vertical-rounded"></i>
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="/editSubCategory?id=${subCategory._id}">
+                <i class="bx bx-edit-alt me-1"></i> Edit
+              </a>
+              <a class="dropdown-item" href="/deleteSubCategory/${subCategory._id}" onclick="return confirm('Are you sure you want to delete this sub category?')">
+                <i class="bx bx-trash me-1"></i> Delete
+              </a>
+            </div>
+          </div>
+        </td>
+      </tr>
+    `).join('');
+  }
+  
+  categoryFilter.addEventListener('change', filterAndSortSubCategories);
+  searchInput.addEventListener('input', filterAndSortSubCategories);
+  sortSelect.addEventListener('change', filterAndSortSubCategories);
+});
+</script>

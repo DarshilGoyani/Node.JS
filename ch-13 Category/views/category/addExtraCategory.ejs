@@ -36,10 +36,10 @@
               <div class="mb-3">
                 <label class="form-label" for="parent-subcategory">Select Sub Category</label>
                 <select class="form-select" name="subCategoryId" id="parent-subcategory" aria-label="Select Sub Category" required>
-                  <option value="">Select a sub category</option>
+                  <option value="">First select a category</option>
                   <% if(subCategories && subCategories.length > 0) { %>
                     <% subCategories.map((subCategory) => { %>
-                      <option value="<%= subCategory._id %>" data-category="<%= subCategory.categoryId._id %>"><%= subCategory.name %></option>
+                      <option value="<%= subCategory._id %>" data-category="<%= subCategory.categoryId._id %>" style="display: none;"><%= subCategory.name %></option>
                     <% }) %>
                   <% } %>
                 </select>
@@ -85,24 +85,66 @@
 <!-- footer -->
 <%- include("../footer")%>
 
+<!-- Hidden data elements to store data for JavaScript -->
+<div id="data-container" style="display: none;">
+  <div id="subcategories-data" data-subcategories='<%= JSON.stringify(subCategories || []) %>'></div>
+  <div id="categories-data" data-categories='<%= JSON.stringify(categories || []) %>'></div>
+</div>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const categorySelect = document.getElementById('parent-category');
   const subCategorySelect = document.getElementById('parent-subcategory');
   
+  // Get data from hidden elements
+  const subCategoriesElement = document.getElementById('subcategories-data');
+  const categoriesElement = document.getElementById('categories-data');
+  
+  let allSubCategories = [];
+  let allCategories = [];
+  
+  // Safely parse JSON with error handling
+  try {
+    const subCategoriesData = subCategoriesElement.getAttribute('data-subcategories');
+    allSubCategories = JSON.parse(subCategoriesData);
+  } catch (e) {
+    console.error('Error parsing subCategories:', e);
+    allSubCategories = [];
+  }
+  
+  try {
+    const categoriesData = categoriesElement.getAttribute('data-categories');
+    allCategories = JSON.parse(categoriesData);
+  } catch (e) {
+    console.error('Error parsing categories:', e);
+    allCategories = [];
+  }
+  
+  console.log('All subCategories:', allSubCategories);
+  console.log('Categories available:', allCategories);
+  
   categorySelect.addEventListener('change', function() {
     const selectedCategoryId = this.value;
+    console.log('Selected category ID:', selectedCategoryId);
     
     // Reset subcategory dropdown
     subCategorySelect.innerHTML = '<option value="">Select a sub category</option>';
     
-    if (selectedCategoryId) {
-      // Filter subcategories based on selected category
-      const subCategories = subCategorySelect.querySelectorAll('option[data-category]');
-      subCategories.forEach(function(option) {
-        if (option.dataset.category === selectedCategoryId) {
-          subCategorySelect.appendChild(option);
-        }
+    if (selectedCategoryId && allSubCategories.length > 0) {
+      // Get all subcategory options and filter them
+      const filteredSubCategories = allSubCategories.filter(function(subCategory) {
+        console.log('Checking subCategory:', subCategory.name, 'with categoryId:', subCategory.categoryId?._id);
+        return subCategory.categoryId && subCategory.categoryId._id === selectedCategoryId;
+      });
+      
+      console.log('Filtered subCategories:', filteredSubCategories);
+      
+      // Add filtered subcategories to dropdown
+      filteredSubCategories.forEach(function(subCategory) {
+        const option = document.createElement('option');
+        option.value = subCategory._id;
+        option.textContent = subCategory.name;
+        subCategorySelect.appendChild(option);
       });
     }
   });

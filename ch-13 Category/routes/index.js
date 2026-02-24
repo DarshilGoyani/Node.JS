@@ -20,29 +20,47 @@ const {
     otpPage,
     VerifyOtp,
     forgotPasswordPage,
-    forgotPassword,
-    // Category routes
+    forgotPassword
+} = require('../controller/emp.controller');
+
+// Import separate category controllers
+const {
     addCategoryPage,
     addCategory,
     viewCategory,
     editCategory,
     updateCategory,
-    deleteCategory,
-    // Sub Category routes
+    deleteCategory
+} = require('../controller/category.controller');
+
+const {
     addSubCategoryPage,
     addSubCategory,
     viewSubCategory,
     editSubCategory,
     updateSubCategory,
-    deleteSubCategory,
-    // Extra Category routes
+    deleteSubCategory
+} = require('../controller/subCategory.controller');
+
+const {
     addExtraCategoryPage,
     addExtraCategory,
     viewExtraCategory,
     editExtraCategory,
     updateExtraCategory,
     deleteExtraCategory
-} = require('../controller/emp.controller');
+} = require('../controller/extraCategory.controller');
+
+const {
+    addProductPage,
+    addProduct,
+    viewProduct,
+    editProduct,
+    updateProduct,
+    deleteProduct,
+    getSubCategoriesByCategory,
+    getExtraCategoriesBySubCategory
+} = require('../controller/product.controller');
 
 const router = express.Router();
 
@@ -104,5 +122,17 @@ router.get('/viewExtraCategory', checkAuthIsDone, viewExtraCategory);
 router.get('/editExtraCategory', checkAuthIsDone, editExtraCategory);
 router.post('/updateExtraCategory', checkAuthIsDone, upload.single('image'), updateExtraCategory);
 router.get('/deleteExtraCategory/:id', checkAuthIsDone, deleteExtraCategory);
+
+// Product Routes
+router.get('/addProduct', checkAuthIsDone, addProductPage);
+router.post('/addProduct', checkAuthIsDone, upload.single('image'), addProduct);
+router.get('/viewProduct', checkAuthIsDone, viewProduct);
+router.get('/editProduct', checkAuthIsDone, editProduct);
+router.post('/updateProduct', checkAuthIsDone, upload.single('image'), updateProduct);
+router.get('/deleteProduct/:id', checkAuthIsDone, deleteProduct);
+
+// API Routes for dynamic dropdowns
+router.get('/api/subcategories/:categoryId', checkAuthIsDone, getSubCategoriesByCategory);
+router.get('/api/extracategories/:subCategoryId', checkAuthIsDone, getExtraCategoriesBySubCategory);
 
 module.exports = router;
