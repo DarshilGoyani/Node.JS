@@ -46,17 +46,17 @@ router.get('/dashboard', checkAuthIsDone, dashborad);
 
 router.get('/viewAdmin', checkAuthIsDone, viewadmin);
 router.get('/addAdmin', checkAuthIsDone, addAdminPage);
-router.post('/addAdmin', checkAuthIsDone, upload.single('profile'), addAdmin);
+router.post('/addAdmin', checkAuthIsDone, upload.single('profile_image'), addAdmin);
 
 router.get('/editAdmin/:id', checkAuthIsDone, editAdmin);
-router.post('/updateAdmin/:id', checkAuthIsDone, upload.single('profile'), updateAdmin);
+router.post('/updateAdmin/:id', checkAuthIsDone, upload.single('profile_image'), updateAdmin);
 
 router.get('/deleteAdmin/:id', checkAuthIsDone, deleteAdmin);
 
 router.get('/profile', checkAuthIsDone, profile);
 
-router.get('/change-password', checkAuthIsDone, changePasswordPage);
-router.post('/change-password', checkAuthIsDone, changePassword);
+router.get('/change-password-auth', checkAuthIsDone, changePasswordPage);
+router.post('/change-password-auth', checkAuthIsDone, changePassword);
 
 router.get('/logout', checkAuthIsDone, logout);
 

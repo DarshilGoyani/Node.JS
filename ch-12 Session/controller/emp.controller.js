@@ -1,3 +1,4 @@
+const dotenv = require("dotenv").config();
 const Admin = require('../model/admin.model')
 const nodemailer = require('nodemailer');
 const fs = require('fs');
@@ -57,8 +58,8 @@ module.exports.verifyEmail = async (req, res) => {
         let transporter = nodemailer.createTransport({
             service: "gmail",
             auth: {
-                user: "sujalkidecha68@gmail.com",
-                pass: "ztjqvhajgetvlngu"
+                user: process.env.user,
+                pass: process.env.pass
             }
         });
         const OTP = Math.floor(10000000 + Math.random() * 90000000).toString();
@@ -103,7 +104,7 @@ module.exports.verifyEmail = async (req, res) => {
 </div>
 `;
         const info = await transporter.sendMail({
-            from: '"Admin Panel" <sujalkidecha68@gmail.com>',
+            from: '"Admin Panel" <darshilgoyani05@gmail.com>',
             to: req.body.email,
             subject: "Otp Verification",
             html: htmlTemplate
@@ -311,7 +312,7 @@ module.exports.deleteAdmin = async (req, res) => {
     try {
         const currentAdmin = res.locals.admin;
 
-        if (currentAdmin.email !== "sujalkidecha68@gmail.com") {
+        if (currentAdmin.email !== "darshilgoyani05@gmail.com") {
             return res.redirect('/viewAdmin');
         }
 

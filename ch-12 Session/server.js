@@ -9,7 +9,7 @@ const flash = require("connect-flash");
 const { passport, currentAdmin } = require("./middleware/passport.middleware");
 const { setFlash } = require("./middleware/flash.middleware");
 
-const PORT = 8000;
+const PORT = 9000;
 const app = express();
 
 app.set("view engine", "ejs");

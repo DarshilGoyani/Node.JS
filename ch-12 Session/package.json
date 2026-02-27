@@ -12,6 +12,7 @@
   "dependencies": {
     "connect-flash": "^0.1.1",
     "cookie-parser": "^1.4.7",
+    "dotenv": "^17.3.1",
     "ejs": "^3.1.10",
     "express": "^5.2.1",
     "express-session": "^1.19.0",
@@ -21,5 +22,6 @@
     "nodemon": "^3.1.11",
     "passport": "^0.7.0",
     "passport-local": "^1.0.0",
-    "toastify-js": "^1.12.0"  }
+    "toastify-js": "^1.12.0"
+  }
 }
