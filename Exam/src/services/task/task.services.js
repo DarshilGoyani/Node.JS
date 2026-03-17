@@ -9,32 +9,32 @@ module.exports = class TaskService {
         }
     }
 
-    async fetchSingleTask(body) {
+    async fetchSingleTask(query) {
         try {
-            return await Task.findOne(body);
+            return await Task.findOne(query);
         } catch (err) {
             console.error("Fetch Task Error:", err);
         }
     }
     async fetchAllTasks(query) {
         try {
-            return await Task.find();
+            return await Task.find(query);
         } catch (err) {
             console.error("Fetch All Tasks Error:", err);
         }
     }
 
-    async updateTask(id, body) {
+    async updateTask(query, body) {
         try {
-            return await Task.findByIdAndUpdate(id, body, { new: true });
+            return await Task.findOneAndUpdate(query, body, { new: true });
         } catch (err) {
             console.error("Update Task Error:", err);
         }
     }
 
-    async deleteTask(id) {
+    async deleteTask(query) {
         try {
-            return await Task.findByIdAndUpdate(id, { isDeleted: true }, { new: true });
+            return await Task.findOneAndUpdate(query, { isDeleted: true }, { new: true });
         } catch (err) {
             console.error("Delete Task Error:", err);
         }

@@ -32,7 +32,7 @@ module.exports.addTask = async (req, res) => {
 module.exports.getAllTasks = async (req, res) => {
     try {
         
-        const tasks = await taskService.fetchAllTasks();
+        const tasks = await taskService.fetchAllTasks({ userId: req.user.id, isDeleted: false });
 
         return res.status(statusCode.OK).json(successResponce(statusCode.OK, false, MSG.TASKS_FETCHED, tasks))
     }
@@ -64,7 +64,7 @@ module.exports.updateTask = async (req, res) => {
        
         req.body.updateAt =  moment().format("YYYY-MM-DD HH:mm:ss") 
 
-        const task = await taskService.updateTask(req.params.id, req.body);
+        const task = await taskService.updateTask({ _id: req.params.id, userId: req.user.id, isDeleted: false }, req.body);
 
         if (!task) {
             return res.status(statusCode.NOT_FOUND).json(errorResponce(statusCode.NOT_FOUND, true, MSG.TASK_NOT_FOUND))
@@ -79,7 +79,7 @@ module.exports.updateTask = async (req, res) => {
 
 module.exports.deleteTask = async (req, res) => {
     try {
-        const task = await taskService.deleteTask(req.params.id);
+        const task = await taskService.deleteTask({ _id: req.params.id, userId: req.user.id, isDeleted: false });
 
         if (!task) {
             return res.status(statusCode.NOT_FOUND).json(errorResponce(statusCode.NOT_FOUND, true, MSG.TASK_NOT_FOUND))
