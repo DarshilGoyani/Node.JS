@@ -27,7 +27,7 @@ module.exports = class AuthUser{
 
     async fetchAllUser(){
         try{
-            return await User.find()
+            return await User.find({ isDelete: false })
         }catch(err){
             console.log("fetch all User error ", err);
             
@@ -45,10 +45,9 @@ module.exports = class AuthUser{
 
     async deleteUser(id){
         try{
-            
+            return await User.findByIdAndUpdate(id, { isDelete: true }, { new: true })
         }catch(err){
             console.log("User delete error ", err);
-            
         } 
     }
 }

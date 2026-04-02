@@ -27,7 +27,7 @@ module.exports = class AuthAdmin{
 
     async fetchAllAdmin(){
         try{
-            return await Admin.find()
+            return await Admin.find({ isDelete: false })
         }catch(err){
             console.log("fetch all admin error ", err);
             
@@ -45,10 +45,9 @@ module.exports = class AuthAdmin{
 
     async deleteAdmin(id){
         try{
-            
+            return await Admin.findByIdAndUpdate(id, { isDelete: true }, { new: true })
         }catch(err){
             console.log("admin delete error ", err);
-            
         } 
     }
 }

@@ -74,7 +74,7 @@ module.exports.loginAdmin = async (req,res) => {
 module.exports.fetchAllAdmins = async (req,res) => {
     try{
         
-        const allAdmins = await Admin.find();
+        const allAdmins = await Admin.find({ isDelete: false });
 
         if (!allAdmins) {
             return res.status(500).json(errorResponse(500,false,MSG.ADMIN_UNAUTHORIZED))
@@ -222,7 +222,7 @@ module.exports.adminProfile = async (req,res) => {
         if (req.user) {
             return res.status(200).json(errorResponse(200, true, MSG.ADMIN_UNAUTHORIZED));
         }
-        const admin = await adminAuth.fetchSingleAdmin({_id : req.query.id,})
+        const admin = await adminAuth.fetchSingleAdmin({_id : req.query.id,isDelete : false})
         return res.status(200).json(successResponse(200, false, MSG.ADMIN_PROFILE_FETCHED, admin))
     }catch(err){
         console.log("error ",err);

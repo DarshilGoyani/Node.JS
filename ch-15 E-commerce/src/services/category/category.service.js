@@ -3,7 +3,7 @@ const Category = require("../../model/category.model")
 module.exports = class CategoryService{
     async fetchCategory(){
         try{
-            return await Category.find();
+            return await Category.find({ isDelete: false });
         }catch(err){
             return res.status(500).json(errorResponse(500, true, MSG.INTERNAL_SERVER_ERROR))
         }
@@ -27,7 +27,7 @@ module.exports = class CategoryService{
 
     async deleteCategory(id){
         try{
-            return await Category.findByIdAndDelete(id)
+            return await Category.findByIdAndUpdate(id, { isDelete: true }, { new: true })
         }catch(err){
             return null
         }
