@@ -18,7 +18,7 @@ module.exports.registerUser = async (req, res) => {
         req.body.password = await bcrypt.hash(req.body.password, 11);
 
         req.body.create_at=  moment().format('DD/MM/YYYY, h:mm:ss A')
-        req.body.update_at=  moment().format('DD/MM/YYYY, h:mm:ss A')
+        req.body.updated_date=  moment().format('DD/MM/YYYY, h:mm:ss A')
         const User = await  userAuth.registerUser(req.body)
         
         if (!User) {
@@ -52,7 +52,7 @@ module.exports.loginUser = async (req, res) => {
 
         // JWT Token
         const payload = {
-            id: user.id,
+            id: admin.id,
         };
 
         const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, { expiresIn: "7d" });

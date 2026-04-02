@@ -16,4 +16,28 @@ module.exports = class CategoryService{
             return res.status(500).json(errorResponse(500, true, MSG.INTERNAL_SERVER_ERROR))
         }
     }
+
+    async updateCategory(id, body){
+        try{
+            return await Category.findByIdAndUpdate(id, body, { new: true })
+        }catch(err){
+            return null
+        }
+    }
+
+    async deleteCategory(id){
+        try{
+            return await Category.findByIdAndDelete(id)
+        }catch(err){
+            return null
+        }
+    }
+    
+    async fetchSingleCategory(id){
+    try{
+        return await Category.findById(id);
+    }catch(err){
+        return null
+    }
+}
 }
